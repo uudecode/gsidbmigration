@@ -1,0 +1,164 @@
+﻿<root version="6.0.2.0">
+  <data id="PODS_SRV_DISTRICT_GCL" comment="PODS.SRV_DISTRICT_GCL" schema="PODS" table="SRV_DISTRICT_GCL">
+    <select>
+      <dbQuery idField="ID">
+        <var name="LPU_ACCESS_FILTER" default="SELECT srv_district_id FROM PODS.SRV_DISTRICT_GCL"/>
+        <query>
+          SELECT SRV_DISTRICT_ID AS CODE, COMPANY_GCL, DESCRIPTION AS DESCR, SOURCE_GCL, COMMENTS, GID
+            FROM PODS.SRV_DISTRICT_GCL
+           WHERE SRV_DISTRICT_ID IN ({LPU_ACCESS_FILTER})
+           ORDER BY lower(DESCRIPTION)
+        </query>
+      </dbQuery>
+    </select>
+    <insert>
+      <dbCommand>
+        <param name="ID" type="String" direction="Output"/>
+        <param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <query>
+          DECLARE v_permission_granted NUMBER;
+          BEGIN
+          SELECT COUNT(*)
+            INTO v_permission_granted
+            FROM WEB50.B_USER_TO_B_ROLE u2r
+           WHERE u2r.USER_ID = :USER_ID
+             AND ((EXISTS (SELECT 1
+                             FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                  JOIN WEB50.B_POLICY_RULES pr
+                                    ON r2p.POLICY_ID = pr.POLICY_ID
+                            WHERE r2p.role_id = u2r.role_id
+                              AND pr.CLASS_ID='PODS_DATA'
+                              AND pr.INSERT_PERMITTED = 1)
+                    AND NOT EXISTS (SELECT 1
+                                    FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                         JOIN WEB50.B_POLICY_RULES pr
+                                           ON r2p.POLICY_ID = pr.POLICY_ID
+                                   WHERE r2p.role_id = u2r.role_id 
+                                     AND pr.CLASS_ID='PODS_SRV_DISTRICT_GCL'))
+                  OR EXISTS (SELECT 1
+                               FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                    JOIN WEB50.B_POLICY_RULES pr
+                                      ON r2p.POLICY_ID = pr.POLICY_ID
+                              WHERE r2p.role_id = u2r.role_id
+                                AND pr.CLASS_ID='PODS_SRV_DISTRICT_GCL'
+                                AND pr.INSERT_PERMITTED = 1));
+          IF v_permission_granted &gt; 0
+          THEN NULL;
+            
+          BEGIN
+          INSERT INTO PODS.SRV_DISTRICT_GCL(SRV_DISTRICT_ID, COMPANY_GCL, DESCRIPTION, SOURCE_GCL, COMMENTS, GID)
+          VALUES ('{CODE}', '{COMPANY_GCL}', '{DESCR}', '{SOURCE_GCL}', '{COMMENTS}', '{GID}');
+          :ID := '{CODE}';
+          END;
+        
+          ELSE RAISE_APPLICATION_ERROR(-20771,'Нет прав на добавление объектов. Обратитесь к администратору.');
+          END IF;
+        END;
+</query>
+      </dbCommand>
+    </insert>
+    <update>
+      <dbCommand>
+        <param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <query>
+          DECLARE
+            v_permission_granted NUMBER;
+          BEGIN
+
+          SELECT COUNT(*)
+            INTO v_permission_granted
+            FROM WEB50.B_USER_TO_B_ROLE u2r
+           WHERE u2r.USER_ID = :USER_ID
+             AND ((EXISTS (SELECT 1
+                             FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                  JOIN WEB50.B_POLICY_RULES pr
+                                    ON r2p.POLICY_ID = pr.POLICY_ID
+                            WHERE r2p.role_id = u2r.role_id
+                              AND pr.CLASS_ID='PODS_DATA'
+                              AND pr.UPDATE_PERMITTED = 1)
+                    AND NOT EXISTS (SELECT 1
+                                    FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                         JOIN WEB50.B_POLICY_RULES pr
+                                           ON r2p.POLICY_ID = pr.POLICY_ID
+                                   WHERE r2p.role_id = u2r.role_id 
+                                     AND pr.CLASS_ID='PODS_SRV_DISTRICT_GCL'))
+                  OR EXISTS (SELECT 1
+                               FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                    JOIN WEB50.B_POLICY_RULES pr
+                                      ON r2p.POLICY_ID = pr.POLICY_ID
+                              WHERE r2p.role_id = u2r.role_id
+                                AND pr.CLASS_ID='PODS_SRV_DISTRICT_GCL'
+                                AND pr.UPDATE_PERMITTED = 1));
+
+          IF v_permission_granted &gt; 0
+          THEN
+            NULL;
+            
+          BEGIN
+          UPDATE PODS.SRV_DISTRICT_GCL SET
+          SRV_DISTRICT_ID = '{CODE}'
+          ,COMPANY_GCL = '{COMPANY_GCL}'
+          ,DESCRIPTION = '{DESCR}'
+          ,SOURCE_GCL = '{SOURCE_GCL}'
+          ,COMMENTS = '{COMMENTS}'
+          ,GID = '{GID}'
+          WHERE SRV_DISTRICT_ID = '{CODE}';
+          END;
+        
+          ELSE
+            RAISE_APPLICATION_ERROR(-20771,'Нет прав на редактирование объектов. Обратитесь к администратору.');
+          END IF;
+        END;
+</query>
+      </dbCommand>
+    </update>
+    <delete>
+      <dbCommand>
+        <param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <query>
+          DECLARE
+            v_permission_granted NUMBER;
+          BEGIN
+
+          SELECT COUNT(*)
+            INTO v_permission_granted
+            FROM WEB50.B_USER_TO_B_ROLE u2r
+           WHERE u2r.USER_ID = :USER_ID
+             AND ((EXISTS (SELECT 1
+                             FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                  JOIN WEB50.B_POLICY_RULES pr
+                                    ON r2p.POLICY_ID = pr.POLICY_ID
+                            WHERE r2p.role_id = u2r.role_id
+                              AND pr.CLASS_ID='PODS_DATA'
+                              AND pr.DELETE_PERMITTED = 1)
+                    AND NOT EXISTS (SELECT 1
+                                    FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                         JOIN WEB50.B_POLICY_RULES pr
+                                           ON r2p.POLICY_ID = pr.POLICY_ID
+                                   WHERE r2p.role_id = u2r.role_id 
+                                     AND pr.CLASS_ID='PODS_SRV_DISTRICT_GCL'))
+                  OR EXISTS (SELECT 1
+                               FROM WEB50.B_ROLE_TO_B_POLICY r2p
+                                    JOIN WEB50.B_POLICY_RULES pr
+                                      ON r2p.POLICY_ID = pr.POLICY_ID
+                              WHERE r2p.role_id = u2r.role_id
+                                AND pr.CLASS_ID='PODS_SRV_DISTRICT_GCL'
+                                AND pr.DELETE_PERMITTED = 1));
+
+          IF v_permission_granted &gt; 0
+          THEN
+            NULL;
+            
+          BEGIN
+          DELETE FROM PODS.SRV_DISTRICT_GCL WHERE SRV_DISTRICT_ID = '{CODE}';
+          END;
+        
+          ELSE
+            RAISE_APPLICATION_ERROR(-20771,'Нет прав на удаление объектов. Обратитесь к администратору.');
+          END IF;
+        END;
+</query>
+      </dbCommand>
+    </delete>
+  </data>
+</root>

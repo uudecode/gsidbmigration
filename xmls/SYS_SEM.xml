@@ -208,196 +208,196 @@
       </dbQuery>
     </select>
   </data>
-  <data id="FIRST_DOCS" comment="Запросы для формы добавления документа из существующих">
-    <select>
-      <dbQuery idField="ID">
-        <param name="USER_ID" type="Int64" direction="Input" />
-        <query>WITH admin_grants 
-            AS (SELECT 1 dummy
-                  FROM WEB50.B_USER_TO_B_ROLE u2r
-                       JOIN WEB50.B_ROLE_TO_B_POLICY r2p
-                         ON u2r.ROLE_ID = r2p.ROLE_ID
-                       JOIN WEB50.B_POLICY_RULES pr
-                         ON r2p.POLICY_ID = pr.POLICY_ID 
-                 WHERE u2r.USER_ID = :USER_ID 
-                   AND pr.CLASS_ID='WEB50_LIB_DOC_ADMIN'
-                   AND pr.SELECT_PERMITTED = 1),
-     user_grants 
-            AS (SELECT 1 dummy
-                  FROM WEB50.B_USER_TO_B_ROLE u2r
-                       JOIN WEB50.B_ROLE_TO_B_POLICY r2p
-                         ON u2r.ROLE_ID = r2p.ROLE_ID
-                       JOIN WEB50.B_POLICY_RULES pr
-                         ON r2p.POLICY_ID = pr.POLICY_ID 
-                 WHERE u2r.USER_ID = :USER_ID 
-                   AND pr.CLASS_ID='WEB50_LIB_DOC_USER'
-                   AND pr.SELECT_PERMITTED = 1)
+    <data id="FIRST_DOCS" comment="Запросы для формы добавления документа из существующих">
+        <select>
+            <dbQuery idField="ID">
+                <param name="USER_ID" type="Int64" direction="Input" />
+                <query>WITH admin_grants
+                    AS (SELECT 1 dummy
+                    FROM WEB50.B_USER_TO_B_ROLE u2r
+                    JOIN WEB50.B_ROLE_TO_B_POLICY r2p
+                    ON u2r.ROLE_ID = r2p.ROLE_ID
+                    JOIN WEB50.B_POLICY_RULES pr
+                    ON r2p.POLICY_ID = pr.POLICY_ID
+                    WHERE u2r.USER_ID = :USER_ID
+                    AND pr.CLASS_ID='WEB50_LIB_DOC_ADMIN'
+                    AND pr.SELECT_PERMITTED = '1'),
+                    user_grants
+                    AS (SELECT 1 dummy
+                    FROM WEB50.B_USER_TO_B_ROLE u2r
+                    JOIN WEB50.B_ROLE_TO_B_POLICY r2p
+                    ON u2r.ROLE_ID = r2p.ROLE_ID
+                    JOIN WEB50.B_POLICY_RULES pr
+                    ON r2p.POLICY_ID = pr.POLICY_ID
+                    WHERE u2r.USER_ID = :USER_ID
+                    AND pr.CLASS_ID='WEB50_LIB_DOC_USER'
+                    AND pr.SELECT_PERMITTED = '1')
 
-			SELECT ld.DOC_ID,ld.DOC_TYPE_ID,ld.PARENT_DOC_ID,ld.NAME,ld.DESCR,ld.TIME_STAMP 
-			FROM WEB50.LIB_DOC ld 
-			WHERE (ld.DOC_TYPE_ID=0 OR ld.DOC_TYPE_ID=1 OR ld.DOC_TYPE_ID=41) AND ld.PARENT_DOC_ID IS NULL AND (((ld.status_id = 1
-                      OR (ld.cuser_id = :USER_ID
-                         AND ld.status_id = 0 ))
+                    SELECT ld.DOC_ID,ld.DOC_TYPE_ID,ld.PARENT_DOC_ID,ld.NAME,ld.DESCR,ld.TIME_STAMP
+                    FROM WEB50.LIB_DOC ld
+                    WHERE (ld.DOC_TYPE_ID=0 OR ld.DOC_TYPE_ID=1 OR ld.DOC_TYPE_ID=41) AND ld.PARENT_DOC_ID IS NULL AND (((ld.status_id = 1
+                    OR (ld.cuser_id = :USER_ID
+                    AND ld.status_id = 0 ))
                     AND EXISTS (SELECT 1 FROM user_grants))
-                   OR EXISTS (SELECT 1 FROM admin_grants))
-		</query>
-      </dbQuery>
-    </select>
-  </data>
-  <data id="DOCS_BY_PARENT" comment="Запросы для формы добавления документа из существующих (запрос для дочерних)">
-    <select>
-      <dbQuery idField="ID">
-        <param name="PARENT_DOC_ID" type="Int64" direction="Input" />
-        <param name="USER_ID" type="Int64" direction="Input" />
-        <query>WITH admin_grants 
-            AS (SELECT 1 dummy
-                  FROM WEB50.B_USER_TO_B_ROLE u2r
-                       JOIN WEB50.B_ROLE_TO_B_POLICY r2p
-                         ON u2r.ROLE_ID = r2p.ROLE_ID
-                       JOIN WEB50.B_POLICY_RULES pr
-                         ON r2p.POLICY_ID = pr.POLICY_ID 
-                 WHERE u2r.USER_ID = :USER_ID 
-                   AND pr.CLASS_ID='WEB50_LIB_DOC_ADMIN'
-                   AND pr.SELECT_PERMITTED = 1),
-     user_grants 
-            AS (SELECT 1 dummy
-                  FROM WEB50.B_USER_TO_B_ROLE u2r
-                       JOIN WEB50.B_ROLE_TO_B_POLICY r2p
-                         ON u2r.ROLE_ID = r2p.ROLE_ID
-                       JOIN WEB50.B_POLICY_RULES pr
-                         ON r2p.POLICY_ID = pr.POLICY_ID 
-                 WHERE u2r.USER_ID = :USER_ID 
-                   AND pr.CLASS_ID='WEB50_LIB_DOC_USER'
-                   AND pr.SELECT_PERMITTED = 1)
-			 SELECT ld.DOC_ID,ld.DOC_TYPE_ID,ld.PARENT_DOC_ID,ld.NAME,ld.DESCR,ld.TIME_STAMP 
-			 FROM WEB50.LIB_DOC ld 
-			 WHERE ld.PARENT_DOC_ID=:PARENT_DOC_ID  AND (((ld.status_id = 1
-                      OR (ld.cuser_id = :USER_ID
-                         AND ld.status_id = 0 ))
+                    OR EXISTS (SELECT 1 FROM admin_grants))
+                </query>
+            </dbQuery>
+        </select>
+    </data>
+    <data id="DOCS_BY_PARENT" comment="Запросы для формы добавления документа из существующих (запрос для дочерних)">
+        <select>
+            <dbQuery idField="ID">
+                <param name="PARENT_DOC_ID" type="Int64" direction="Input" />
+                <param name="USER_ID" type="Int64" direction="Input" />
+                <query>WITH admin_grants
+                    AS (SELECT 1 dummy
+                    FROM WEB50.B_USER_TO_B_ROLE u2r
+                    JOIN WEB50.B_ROLE_TO_B_POLICY r2p
+                    ON u2r.ROLE_ID = r2p.ROLE_ID
+                    JOIN WEB50.B_POLICY_RULES pr
+                    ON r2p.POLICY_ID = pr.POLICY_ID
+                    WHERE u2r.USER_ID = :USER_ID
+                    AND pr.CLASS_ID='WEB50_LIB_DOC_ADMIN'
+                    AND pr.SELECT_PERMITTED = '1'),
+                    user_grants
+                    AS (SELECT 1 dummy
+                    FROM WEB50.B_USER_TO_B_ROLE u2r
+                    JOIN WEB50.B_ROLE_TO_B_POLICY r2p
+                    ON u2r.ROLE_ID = r2p.ROLE_ID
+                    JOIN WEB50.B_POLICY_RULES pr
+                    ON r2p.POLICY_ID = pr.POLICY_ID
+                    WHERE u2r.USER_ID = :USER_ID
+                    AND pr.CLASS_ID='WEB50_LIB_DOC_USER'
+                    AND pr.SELECT_PERMITTED = '1')
+                    SELECT ld.DOC_ID,ld.DOC_TYPE_ID,ld.PARENT_DOC_ID,ld.NAME,ld.DESCR,ld.TIME_STAMP
+                    FROM WEB50.LIB_DOC ld
+                    WHERE ld.PARENT_DOC_ID=:PARENT_DOC_ID  AND (((ld.status_id = 1
+                    OR (ld.cuser_id = :USER_ID
+                    AND ld.status_id = 0 ))
                     AND EXISTS (SELECT 1 FROM user_grants))
-                   OR EXISTS (SELECT 1 FROM admin_grants))
-		</query>
-      </dbQuery>
-    </select>
-  </data>
-  <data id="WEB50_LIB_DOC_PARENT" comment="Запрос для comboBox формы WEB50_LIB_DOC, в котором перечислены папки, в которые можно положить документ">
-    <select>
-      <dbQuery idField="ID">
-        <query>
-						SELECT DOC_ID AS CODE, NAME AS DESCR FROM  WEB50.LIB_DOC WHERE DOC_TYPE_ID='0' UNION ALL SELECT -1 AS CODE, ' по умолчанию ' AS DESCR FROM DUAL ORDER BY DESCR
-		</query>
-      </dbQuery>
-    </select>
-  </data>
-  <data id="WEB50_LIB_DOC" comment="WEB50.LIB_DOC" schema="WEB50" table="LIB_DOC" descr="Документ">
-    <select>
-      <dbQuery idField="ID">
-        <param name="SYS_OBJ_ID" type="Int64" direction="Input" />
-        <param name="USER_ID" type="Int64" direction="Input" />
-        <query>
-WITH admin_grants 
-            AS (SELECT 1 dummy
-                  FROM WEB50.B_USER_TO_B_ROLE u2r
-                       JOIN WEB50.B_ROLE_TO_B_POLICY r2p
-                         ON u2r.ROLE_ID = r2p.ROLE_ID
-                       JOIN WEB50.B_POLICY_RULES pr
-                         ON r2p.POLICY_ID = pr.POLICY_ID 
-                 WHERE u2r.USER_ID = :USER_ID 
-                   AND pr.CLASS_ID='WEB50_LIB_DOC_ADMIN'
-                   AND pr.SELECT_PERMITTED = 1),
-     user_grants 
-            AS (SELECT 1 dummy
-                  FROM WEB50.B_USER_TO_B_ROLE u2r
-                       JOIN WEB50.B_ROLE_TO_B_POLICY r2p
-                         ON u2r.ROLE_ID = r2p.ROLE_ID
-                       JOIN WEB50.B_POLICY_RULES pr
-                         ON r2p.POLICY_ID = pr.POLICY_ID 
-                 WHERE u2r.USER_ID = :USER_ID 
-                   AND pr.CLASS_ID='WEB50_LIB_DOC_USER'
-                   AND pr.SELECT_PERMITTED = 1)
-        SELECT ld.NAME,ld.DESCR,ld.PROVIDER,ld.STATUS_ID,ld.TIME_STAMP,ld.GID,ld.DOC_TYPE_ID,ld.PARENT_DOC_ID
-              ,ld.CTIME,ld.CUSER_ID,ld.MUSER_ID,ld.MTIME,ld.DOC_ID,ldv.STORAGE_ID,ldv.FILE_NAME,
-              ldtr.NAME TYPE_NAME, ldtr.DESCR TYPE_DESCR, bupm.LOGIN MUSER
-          FROM WEB50.LIB_DOC ld
-             JOIN web50.lib_doc_type_ref ldtr ON ldtr.DOC_TYPE_ID=ld.DOC_TYPE_ID
-             LEFT JOIN web50.b_user_private bupm ON bupm.USER_ID=ld.MUSER_ID
-               LEFT JOIN WEB50.LIB_DOC_VERSION ldv 
-                 ON ldv.DOC_ID=ld.DOC_ID
-        WHERE ld.DOC_ID = :SYS_OBJ_ID  AND (((ld.status_id = 1
-                      OR (ld.cuser_id = :USER_ID
-                         AND ld.status_id = 0 ))
+                    OR EXISTS (SELECT 1 FROM admin_grants))
+                </query>
+            </dbQuery>
+        </select>
+    </data>
+    <data id="WEB50_LIB_DOC_PARENT" comment="Запрос для comboBox формы WEB50_LIB_DOC, в котором перечислены папки, в которые можно положить документ">
+        <select>
+            <dbQuery idField="ID">
+                <query>
+                    SELECT DOC_ID AS CODE, NAME AS DESCR FROM  WEB50.LIB_DOC WHERE DOC_TYPE_ID='0' UNION ALL SELECT -1 AS CODE, ' по умолчанию ' AS DESCR  ORDER BY DESCR
+                </query>
+            </dbQuery>
+        </select>
+    </data>
+    <data id="WEB50_LIB_DOC" comment="WEB50.LIB_DOC" schema="WEB50" table="LIB_DOC" descr="Документ">
+        <select>
+            <dbQuery idField="ID">
+                <param name="SYS_OBJ_ID" type="Int64" direction="Input" />
+                <param name="USER_ID" type="Int64" direction="Input" />
+                <query>
+                    WITH admin_grants
+                    AS (SELECT 1 dummy
+                    FROM WEB50.B_USER_TO_B_ROLE u2r
+                    JOIN WEB50.B_ROLE_TO_B_POLICY r2p
+                    ON u2r.ROLE_ID = r2p.ROLE_ID
+                    JOIN WEB50.B_POLICY_RULES pr
+                    ON r2p.POLICY_ID = pr.POLICY_ID
+                    WHERE u2r.USER_ID = :USER_ID
+                    AND pr.CLASS_ID='WEB50_LIB_DOC_ADMIN'
+                    AND pr.SELECT_PERMITTED = '1'),
+                    user_grants
+                    AS (SELECT 1 dummy
+                    FROM WEB50.B_USER_TO_B_ROLE u2r
+                    JOIN WEB50.B_ROLE_TO_B_POLICY r2p
+                    ON u2r.ROLE_ID = r2p.ROLE_ID
+                    JOIN WEB50.B_POLICY_RULES pr
+                    ON r2p.POLICY_ID = pr.POLICY_ID
+                    WHERE u2r.USER_ID = :USER_ID
+                    AND pr.CLASS_ID='WEB50_LIB_DOC_USER'
+                    AND pr.SELECT_PERMITTED = '1')
+                    SELECT ld.NAME,ld.DESCR,ld.PROVIDER,ld.STATUS_ID,ld.TIME_STAMP,ld.GID,ld.DOC_TYPE_ID,ld.PARENT_DOC_ID
+                    ,ld.CTIME,ld.CUSER_ID,ld.MUSER_ID,ld.MTIME,ld.DOC_ID,ldv.STORAGE_ID,ldv.FILE_NAME,
+                    ldtr.NAME TYPE_NAME, ldtr.DESCR TYPE_DESCR, bupm.LOGIN MUSER
+                    FROM WEB50.LIB_DOC ld
+                    JOIN web50.lib_doc_type_ref ldtr ON ldtr.DOC_TYPE_ID=ld.DOC_TYPE_ID
+                    LEFT JOIN web50.b_user_private bupm ON bupm.USER_ID=ld.MUSER_ID
+                    LEFT JOIN WEB50.LIB_DOC_VERSION ldv
+                    ON ldv.DOC_ID=ld.DOC_ID
+                    WHERE ld.DOC_ID = :SYS_OBJ_ID  AND (((ld.status_id = 1
+                    OR (ld.cuser_id = :USER_ID
+                    AND ld.status_id = 0 ))
                     AND EXISTS (SELECT 1 FROM user_grants))
-                   OR EXISTS (SELECT 1 FROM admin_grants))
-      </query>
-      </dbQuery>
-    </select>
-    <!-- В скрипте используется вставка только файла, поэтому DOC_TYPE_ID=1 !!! В этом же скрипте вставляется LIB_DOC_VERSION -->
-    <insert>
-      <dbCommand>
-        <param name="ID" type="Int64" direction="Output" />
-        <param name="NAME" type="String" direction="Input" />
-        <param name="DESCR" type="String" direction="Input" />
-        <param name="PARENT_DOC_ID" type="Int64" direction="Input" />
-        <param name="USER_ID" type="Int64" direction="Input" />
-        <param name="MIME_NAME" type="String" direction="Input" />
-        <param name="STORAGE_ID" type="Int64" direction="Input" default="0"/>
-        <param name="FILE_NAME" type="String" direction="Input" />
-        <query>
-      DECLARE varDocId NUMBER;
-      BEGIN
-      :MIME_NAME := regexp_substr(:FILE_NAME,'\..*$');
-      INSERT INTO WEB50.LIB_DOC(NAME,DESCR,PROVIDER,STATUS_ID,TIME_STAMP,DOC_TYPE_ID,PARENT_DOC_ID,CTIME,CUSER_ID)
-                         VALUES(:NAME,:DESCR,NULL,1,SYSDATE,1,:PARENT_DOC_ID,SYSDATE,:USER_ID)
-             RETURNING DOC_ID INTO varDocId;
-      INSERT INTO WEB50.LIB_DOC_VERSION (DOC_ID,NEXT_DOC_VERSION_ID,MIME_TYPE_ID,STORAGE_ID,NAME,DESCR,VERSION_NUMBER,BODY,FILE_NAME,CTIME,CUSER_ID,MTIME,MUSER_ID)
-      VALUES (varDocId,NULL,(SELECT DISTINCT FIRST_VALUE(MIME_TYPE_ID) OVER (ORDER BY MIME_TYPE_ID DESC) FROM WEB50.LIB_MIME_TYPE_REF WHERE (EXTENSION_NAME = :MIME_NAME OR MIME_TYPE_ID = 0)),
-      :STORAGE_ID,NULL,'Начальная вставка',1.0,NULL,:FILE_NAME,sysdate,:USER_ID,NULL,NULL);
-      :ID := varDocId;
-      END;
-    </query>
-      </dbCommand>
-    </insert>
-    <update>
-      <dbCommand>
-        <param name="NAME" type="String" direction="Input" />
-        <param name="DESCR" type="String" direction="Input" />
-        <param name="PARENT_DOC_ID" type="Int64" direction="Input" />
-        <param name="USER_ID" type="Int64" direction="Input" />
-        <param name="MIME_NAME" type="String" direction="Input" />
-        <param name="SYS_OBJ_ID" type="Int64" direction="Input" />
-        <query>
-      BEGIN
-	  :MIME_NAME := regexp_substr(:FILE_NAME,'\..*$');
-	  UPDATE WEB50.LIB_DOC
-      SET
-      NAME = :NAME
-      ,DESCR = :DESCR
-      ,PARENT_DOC_ID = :PARENT_DOC_ID
-      ,MTIME = SYSDATE
-      ,MUSER_ID = :USER_ID
-      WHERE DOC_ID = :SYS_OBJ_ID;
-      UPDATE WEB50.LIB_DOC_VERSION SET MIME_TYPE_ID=(SELECT DISTINCT FIRST_VALUE(MIME_TYPE_ID) OVER (ORDER BY MIME_TYPE_ID DESC) FROM WEB50.LIB_MIME_TYPE_REF WHERE (EXTENSION_NAME = :MIME_NAME OR MIME_TYPE_ID = 0)),
-	  NAME='Документ изменен',FILE_NAME=:FILE_NAME,MTIME=SYSDATE,MUSER_ID=:USER_ID
-	  WHERE DOC_ID = :SYS_OBJ_ID;
-      END;
-    </query>
-      </dbCommand>
-    </update>
-    <delete>
-      <dbCommand>
-        <param name="SYS_OBJ_ID" type="Int64" direction="Input" />
-        <query>
-			BEGIN
-			DELETE
-			FROM WEB50.LIB_DOC_VERSION
-			WHERE DOC_ID = :SYS_OBJ_ID;
+                    OR EXISTS (SELECT 1 FROM admin_grants))
+                </query>
+            </dbQuery>
+        </select>
+        <!-- В скрипте используется вставка только файла, поэтому DOC_TYPE_ID=1 !!! В этом же скрипте вставляется LIB_DOC_VERSION -->
+        <insert>
+            <dbCommand>
+                <param name="ID" type="Int64" direction="Output" />
+                <param name="NAME" type="String" direction="Input" />
+                <param name="DESCR" type="String" direction="Input" />
+                <param name="PARENT_DOC_ID" type="Int64" direction="Input" />
+                <param name="USER_ID" type="Int64" direction="Input" />
+                <param name="MIME_NAME" type="String" direction="Input" />
+                <param name="STORAGE_ID" type="Int64" direction="Input" default="0"/>
+                <param name="FILE_NAME" type="String" direction="Input" />
+                <query>
+                    DECLARE varDocId NUMBER;
+                    BEGIN
+                    :MIME_NAME := regexp_substr(:FILE_NAME,'\..*$');
+                    INSERT INTO WEB50.LIB_DOC(NAME,DESCR,PROVIDER,STATUS_ID,TIME_STAMP,DOC_TYPE_ID,PARENT_DOC_ID,CTIME,CUSER_ID)
+                    VALUES(:NAME,:DESCR,NULL,1,SYSDATE,1,:PARENT_DOC_ID,SYSDATE,:USER_ID)
+                    RETURNING DOC_ID INTO varDocId;
+                    INSERT INTO WEB50.LIB_DOC_VERSION (DOC_ID,NEXT_DOC_VERSION_ID,MIME_TYPE_ID,STORAGE_ID,NAME,DESCR,VERSION_NUMBER,BODY,FILE_NAME,CTIME,CUSER_ID,MTIME,MUSER_ID)
+                    VALUES (varDocId,NULL,(SELECT DISTINCT FIRST_VALUE(MIME_TYPE_ID) OVER (ORDER BY MIME_TYPE_ID DESC) FROM WEB50.LIB_MIME_TYPE_REF WHERE (EXTENSION_NAME = :MIME_NAME OR MIME_TYPE_ID = 0)),
+                    :STORAGE_ID,NULL,'Начальная вставка',1.0,NULL,:FILE_NAME,sysdate,:USER_ID,NULL,NULL);
+                    :ID := varDocId;
+                    END;
+                </query>
+            </dbCommand>
+        </insert>
+        <update>
+            <dbCommand>
+                <param name="NAME" type="String" direction="Input" />
+                <param name="DESCR" type="String" direction="Input" />
+                <param name="PARENT_DOC_ID" type="Int64" direction="Input" />
+                <param name="USER_ID" type="Int64" direction="Input" />
+                <param name="MIME_NAME" type="String" direction="Input" />
+                <param name="SYS_OBJ_ID" type="Int64" direction="Input" />
+                <query>
+                    BEGIN
+                    :MIME_NAME := regexp_substr(:FILE_NAME,'\..*$');
+                    UPDATE WEB50.LIB_DOC
+                    SET
+                    NAME = :NAME
+                    ,DESCR = :DESCR
+                    ,PARENT_DOC_ID = :PARENT_DOC_ID
+                    ,MTIME = SYSDATE
+                    ,MUSER_ID = :USER_ID
+                    WHERE DOC_ID = :SYS_OBJ_ID;
+                    UPDATE WEB50.LIB_DOC_VERSION SET MIME_TYPE_ID=(SELECT DISTINCT FIRST_VALUE(MIME_TYPE_ID) OVER (ORDER BY MIME_TYPE_ID DESC) FROM WEB50.LIB_MIME_TYPE_REF WHERE (EXTENSION_NAME = :MIME_NAME OR MIME_TYPE_ID = 0)),
+                    NAME='Документ изменен',FILE_NAME=:FILE_NAME,MTIME=SYSDATE,MUSER_ID=:USER_ID
+                    WHERE DOC_ID = :SYS_OBJ_ID;
+                    END;
+                </query>
+            </dbCommand>
+        </update>
+        <delete>
+            <dbCommand>
+                <param name="SYS_OBJ_ID" type="Int64" direction="Input" />
+                <query>
+                    BEGIN
+                    DELETE
+                    FROM WEB50.LIB_DOC_VERSION
+                    WHERE DOC_ID = :SYS_OBJ_ID;
 
-			DELETE FROM WEB50.LIB_DOC WHERE DOC_ID = :SYS_OBJ_ID;
-			END;
-		</query>
-      </dbCommand>
-    </delete>
-  </data>
+                    DELETE FROM WEB50.LIB_DOC WHERE DOC_ID = :SYS_OBJ_ID;
+                    END;
+                </query>
+            </dbCommand>
+        </delete>
+    </data>
   <data id="EXTERNAL_DATA" comment="Запрос для запуска полученного запроса, результатом будут свойства">
     <select>
       <dbQuery idField="ID">
@@ -528,140 +528,140 @@ WITH admin_grants
     </select>
   </data>
     <!-- Запросы для работы со вкладкой "прикрепленные документы" -->
-  <data id="DOCUMENT_LIST" comment="Запросы для получения списка прикрепленных документов по SYS_FULL_ID объекта; для вставки в LNK_GATE; для удаления из LNK_GATE">
-    <select>
-      <dbQuery idField="ID">
-        <param name="SYS_FULL_ID" type="String" direction="Input" />
-        <query>
-			    WITH s_gate AS (SELECT gate_id,substr(left_obj_id,15) obj_id 
-								FROM WEB50.LNK_GATE WHERE left_obj_id like 'WEB50_LIB_DOC/%' 
-								UNION  SELECT gate_id,substr(right_obj_id,15) obj_id 
-								FROM WEB50.LNK_GATE WHERE right_obj_id like 'WEB50_LIB_DOC/%') 
-				SELECT sg.GATE_ID,lg.LEFT_OBJ_ID,lg.RIGHT_OBJ_ID,lg.CTIME,usr.LOGIN AS USERNAME,ld.DESCR AS CATEGORY,ld.NAME AS DESCR,ld.DOC_ID AS DOC_ID,ld.DOC_TYPE_ID AS DOC_TYPE_ID,ldv.DOC_VERSION_ID AS DOC_VERSION_ID,ldv.FILE_NAME AS FILE_NAME 
-				FROM s_gate sg 
-				JOIN WEB50.LNK_GATE lg ON sg.GATE_ID = lg.GATE_ID 
-				JOIN WEB50.B_USER_PRIVATE usr ON usr.USER_ID=lg.CUSER_ID 
-				JOIN WEB50.LIB_DOC ld ON ld.DOC_ID = sg.OBJ_ID 
-				JOIN WEB50.LIB_DOC_TYPE_REF ldtr ON ld.DOC_TYPE_ID = ldtr.DOC_TYPE_ID 
-				LEFT OUTER JOIN WEB50.LIB_DOC_VERSION ldv ON ldv.DOC_ID = ld.DOC_ID 
-				WHERE lg.LNK_TYPE_ID=3 AND (lg.LEFT_OBJ_ID=:SYS_FULL_ID or lg.RIGHT_OBJ_ID=:SYS_FULL_ID) 
-		</query>
-      </dbQuery>
-    </select>
-    <insert>
-      <dbCommand>
-        <param name="ID" type="Int64" direction="Output" />
-        <param name="USER_ID" type="Int64" direction="Input" />
-        <param name="LEFT_OBJ_ID" type="String" direction="Input" />
-        <param name="RIGHT_OBJ_ID" type="String" direction="Input" />
-        <query>
-			DECLARE v_same_id NUMBER;
-			BEGIN
-      /* не добавляем связь, если уже существует точно такая же, или если пытаемся добавить связь видеозаписи с треком, когда у этой видеозаписи уже есть связь с другим треком */
-			SELECT COUNT(*) INTO v_same_id FROM WEB50.LNK_GATE WHERE LEFT_OBJ_ID=:LEFT_OBJ_ID AND 
-          (RIGHT_OBJ_ID=:RIGHT_OBJ_ID OR (LEFT_OBJ_ID in (select 'WEB50_LIB_DOC/'||TO_NUMBER(doc_id) FROM WEB50.LIB_DOC WHERE DOC_TYPE_ID=41) AND RIGHT_OBJ_ID LIKE 'WEB50_POI_TRACK/%' AND :RIGHT_OBJ_ID LIKE 'WEB50_POI_TRACK/%'));
-			IF (v_same_id &gt; 0)
-			THEN
-			  RAISE_APPLICATION_ERROR(-20701,'Невозможно добавить связь. Такая связь уже существует.');
-			ELSE
-			     INSERT INTO WEB50.LNK_GATE (LEFT_OBJ_ID,RIGHT_OBJ_ID,LNK_TYPE_ID,CTIME,CUSER_ID,MTIME,MUSER_ID) 
-				 VALUES (:LEFT_OBJ_ID,:RIGHT_OBJ_ID,3,sysdate,:USER_ID,NULL,NULL) RETURNING GATE_ID INTO :ID; 
-			END IF;
-			END; 
-		</query>
-      </dbCommand>
-    </insert>
-    <delete>
-      <dbCommand>
-        <param name="GATE_ID" type="Int64" direction="Input" />
-        <query>
-			    BEGIN   DELETE FROM WEB50.LNK_GATE WHERE GATE_ID=:GATE_ID;   END; 
-		</query>
-      </dbCommand>
-    </delete>
-  </data>
-  <!-- Запросы для работы с новостной лентой комментариев и прикрепленных документов -->
-  <data id="LIB_DOC_COMMENTS_LIST" comment="Запросы для получения списка прикрепленных документов и комментариев по SYS_FULL_ID объекта для новостной ленты; для вставки в WEB50_LIB_DOC, LNK_GATE; для удаления из LNK_GATE">
-    <select>
-      <dbQuery idField="ID">
-        <param name="SYS_OBJ_ID" type="Int64" direction="Input" />
-        <param name="SYS_FULL_ID" type="String" direction="Input" />
-        <param name="DB_TABLE_ID" type="String" direction="Input" />
-        <query>
-          WITH s_gate AS (SELECT gate_id,substr(left_obj_id,15) obj_id
-          FROM WEB50.LNK_GATE WHERE left_obj_id like 'WEB50_LIB_DOC/%'
-          UNION  SELECT gate_id,substr(right_obj_id,15) obj_id
-          FROM WEB50.LNK_GATE WHERE right_obj_id like 'WEB50_LIB_DOC/%')
-          select * from (
-          SELECT a.COMMENTS_ID GATE_ID,
-          to_char(a.COMMENTS_ID) LEFT_OBJ_ID,
-          b.TABLE_NAME || '/' || a.ID RIGHT_OBJ_ID,
-          a.CREATE_DATE CTIME,
-          a.pods_user USERNAME,
-          a.COMMENT_BY DESCR,
-          a.COMMENTS NAME,
-          a.COMMENTS_ID DOC_ID,
-          -10 DOC_TYPE_ID,
-          a.COMMENTS_ID DOC_VERSION_ID,
-          NULL FILE_NAME,
-          NULL PARENT_NAME,
-          NULL TYPE_NAME,
-          NULL TYPE_DESCR,
-          NULL MUSER_ID,
-          NULL MTIME,
-          NULL MUSER
-          FROM    PODS.COMMENTS a
-          JOIN
-          PODS.PODS_TABLE b
-          ON a.TABLE_ID = b.TABLE_ID  WHERE a.ID=:SYS_OBJ_ID and b.TABLE_NAME=:DB_TABLE_ID
-          union all
-          SELECT sg.GATE_ID,lg.LEFT_OBJ_ID,lg.RIGHT_OBJ_ID,lg.CTIME,usr.LOGIN AS USERNAME,ld.DESCR AS DESCR,ld.NAME AS NAME,ld.DOC_ID AS DOC_ID,ld.DOC_TYPE_ID AS DOC_TYPE_ID,ldv.DOC_VERSION_ID AS DOC_VERSION_ID,ldv.FILE_NAME AS FILE_NAME
-          ,parentld.NAME AS PARENT_NAME,ldtr.NAME AS TYPE_NAME,ldtr.DESCR AS TYPE_DESCR,ld.MUSER_ID,ld.MTIME,musr.LOGIN AS MUSER
-          FROM s_gate sg
-          JOIN WEB50.LNK_GATE lg ON sg.GATE_ID = lg.GATE_ID
-          JOIN WEB50.B_USER_PRIVATE usr ON usr.USER_ID=lg.CUSER_ID
-          JOIN WEB50.LIB_DOC ld ON ld.DOC_ID = sg.OBJ_ID
-          JOIN WEB50.LIB_DOC_TYPE_REF ldtr ON ld.DOC_TYPE_ID = ldtr.DOC_TYPE_ID
-          LEFT OUTER JOIN WEB50.LIB_DOC_VERSION ldv ON ldv.DOC_ID = ld.DOC_ID
-          LEFT OUTER JOIN WEB50.B_USER_PRIVATE musr ON musr.USER_ID=ld.MUSER_ID
-          LEFT OUTER JOIN WEB50.LIB_DOC parentld ON parentld.DOC_ID=ld.PARENT_DOC_ID
-          WHERE lg.LNK_TYPE_ID=3 AND (lg.LEFT_OBJ_ID=:SYS_FULL_ID or lg.RIGHT_OBJ_ID=:SYS_FULL_ID) )
-          order by CTIME
-        </query>
-      </dbQuery>
-    </select>
-    <insert>
-      <dbCommand>
-        <param name="ID" type="Int64" direction="Output" />
-        <param name="USER_ID" type="Int64" direction="Input" />
-        <param name="LEFT_OBJ_ID" type="String" direction="Input" />
-        <param name="RIGHT_OBJ_ID" type="String" direction="Input" />
-        <query>
-          DECLARE v_same_id NUMBER;
-          BEGIN
-          /* не добавляем связь, если уже существует точно такая же, или если пытаемся добавить связь видеозаписи с треком, когда у этой видеозаписи уже есть связь с другим треком */
-          SELECT COUNT(*) INTO v_same_id FROM WEB50.LNK_GATE WHERE LEFT_OBJ_ID=:LEFT_OBJ_ID AND
-          (RIGHT_OBJ_ID=:RIGHT_OBJ_ID OR (LEFT_OBJ_ID in (select 'WEB50_LIB_DOC/'||TO_NUMBER(doc_id) FROM WEB50.LIB_DOC WHERE DOC_TYPE_ID=41) AND RIGHT_OBJ_ID LIKE 'WEB50_POI_TRACK/%' AND :RIGHT_OBJ_ID LIKE 'WEB50_POI_TRACK/%'));
-          IF (v_same_id &gt; 0)
-          THEN
-          RAISE_APPLICATION_ERROR(-20701,'Невозможно добавить связь. Такая связь уже существует.');
-          ELSE
-          INSERT INTO WEB50.LNK_GATE (LEFT_OBJ_ID,RIGHT_OBJ_ID,LNK_TYPE_ID,CTIME,CUSER_ID,MTIME,MUSER_ID)
-          VALUES (:LEFT_OBJ_ID,:RIGHT_OBJ_ID,3,sysdate,:USER_ID,NULL,NULL) RETURNING GATE_ID INTO :ID;
-          END IF;
-          END;
-        </query>
-      </dbCommand>
-    </insert>
-    <delete>
-      <dbCommand>
-        <param name="GATE_ID" type="Int64" direction="Input" />
-        <query>
-          BEGIN   DELETE FROM WEB50.LNK_GATE WHERE GATE_ID=:GATE_ID;   END;
-        </query>
-      </dbCommand>
-    </delete>
-  </data>
+    <data id="DOCUMENT_LIST" comment="Запросы для получения списка прикрепленных документов по SYS_FULL_ID объекта; для вставки в LNK_GATE; для удаления из LNK_GATE">
+        <select>
+            <dbQuery idField="ID">
+                <param name="SYS_FULL_ID" type="String" direction="Input" />
+                <query>
+                    WITH s_gate AS (SELECT gate_id,substr(left_obj_id,15) obj_id
+                    FROM WEB50.LNK_GATE WHERE left_obj_id like 'WEB50_LIB_DOC/%'
+                    UNION  SELECT gate_id,substr(right_obj_id,15) obj_id
+                    FROM WEB50.LNK_GATE WHERE right_obj_id like 'WEB50_LIB_DOC/%')
+                    SELECT sg.GATE_ID,lg.LEFT_OBJ_ID,lg.RIGHT_OBJ_ID,lg.CTIME,usr.LOGIN AS USERNAME,ld.DESCR AS CATEGORY,ld.NAME AS DESCR,ld.DOC_ID AS DOC_ID,ld.DOC_TYPE_ID AS DOC_TYPE_ID,ldv.DOC_VERSION_ID AS DOC_VERSION_ID,ldv.FILE_NAME AS FILE_NAME
+                    FROM s_gate sg
+                    JOIN WEB50.LNK_GATE lg ON sg.GATE_ID = lg.GATE_ID
+                    JOIN WEB50.B_USER_PRIVATE usr ON usr.USER_ID=lg.CUSER_ID
+                    JOIN WEB50.LIB_DOC ld ON ld.DOC_ID::text = sg.OBJ_ID
+                    JOIN WEB50.LIB_DOC_TYPE_REF ldtr ON ld.DOC_TYPE_ID = ldtr.DOC_TYPE_ID
+                    LEFT OUTER JOIN WEB50.LIB_DOC_VERSION ldv ON ldv.DOC_ID = ld.DOC_ID
+                    WHERE lg.LNK_TYPE_ID='3' AND (lg.LEFT_OBJ_ID=:SYS_FULL_ID or lg.RIGHT_OBJ_ID=:SYS_FULL_ID)
+                </query>
+            </dbQuery>
+        </select>
+        <insert>
+            <dbCommand>
+                <param name="ID" type="Int64" direction="Output" />
+                <param name="USER_ID" type="Int64" direction="Input" />
+                <param name="LEFT_OBJ_ID" type="String" direction="Input" />
+                <param name="RIGHT_OBJ_ID" type="String" direction="Input" />
+                <query>
+                    DECLARE v_same_id NUMBER;
+                    BEGIN
+                    /* не добавляем связь, если уже существует точно такая же, или если пытаемся добавить связь видеозаписи с треком, когда у этой видеозаписи уже есть связь с другим треком */
+                    SELECT COUNT(*) INTO v_same_id FROM WEB50.LNK_GATE WHERE LEFT_OBJ_ID=:LEFT_OBJ_ID AND
+                    (RIGHT_OBJ_ID=:RIGHT_OBJ_ID OR (LEFT_OBJ_ID in (select 'WEB50_LIB_DOC/'||TO_NUMBER(doc_id) FROM WEB50.LIB_DOC WHERE DOC_TYPE_ID=41) AND RIGHT_OBJ_ID LIKE 'WEB50_POI_TRACK/%' AND :RIGHT_OBJ_ID LIKE 'WEB50_POI_TRACK/%'));
+                    IF (v_same_id &gt; 0)
+                    THEN
+                    RAISE_APPLICATION_ERROR(-20701,'Невозможно добавить связь. Такая связь уже существует.');
+                    ELSE
+                    INSERT INTO WEB50.LNK_GATE (LEFT_OBJ_ID,RIGHT_OBJ_ID,LNK_TYPE_ID,CTIME,CUSER_ID,MTIME,MUSER_ID)
+                    VALUES (:LEFT_OBJ_ID,:RIGHT_OBJ_ID,3,sysdate,:USER_ID,NULL,NULL) RETURNING GATE_ID INTO :ID;
+                    END IF;
+                    END;
+                </query>
+            </dbCommand>
+        </insert>
+        <delete>
+            <dbCommand>
+                <param name="GATE_ID" type="Int64" direction="Input" />
+                <query>
+                    BEGIN   DELETE FROM WEB50.LNK_GATE WHERE GATE_ID=:GATE_ID;   END;
+                </query>
+            </dbCommand>
+        </delete>
+    </data>
+    <!-- Запросы для работы с новостной лентой комментариев и прикрепленных документов -->
+    <data id="LIB_DOC_COMMENTS_LIST" comment="Запросы для получения списка прикрепленных документов и комментариев по SYS_FULL_ID объекта для новостной ленты; для вставки в WEB50_LIB_DOC, LNK_GATE; для удаления из LNK_GATE">
+        <select>
+            <dbQuery idField="ID">
+                <param name="SYS_OBJ_ID" type="Int64" direction="Input" />
+                <param name="SYS_FULL_ID" type="String" direction="Input" />
+                <param name="DB_TABLE_ID" type="String" direction="Input" />
+                <query>
+                    WITH s_gate AS (SELECT gate_id,substr(left_obj_id,15) obj_id
+                    FROM WEB50.LNK_GATE WHERE left_obj_id like 'WEB50_LIB_DOC/%'
+                    UNION  SELECT gate_id,substr(right_obj_id,15) obj_id
+                    FROM WEB50.LNK_GATE WHERE right_obj_id like 'WEB50_LIB_DOC/%')
+                    select * from (
+                    SELECT a.COMMENTS_ID GATE_ID,
+                    (a.COMMENTS_ID)::text LEFT_OBJ_ID,
+                    b.TABLE_NAME || '/' || a.ID RIGHT_OBJ_ID,
+                    a.CREATE_DATE CTIME,
+                    a.pods_user USERNAME,
+                    a.COMMENT_BY DESCR,
+                    a.COMMENTS "name",
+                    a.COMMENTS_ID DOC_ID,
+                    -10 DOC_TYPE_ID,
+                    a.COMMENTS_ID DOC_VERSION_ID,
+                    NULL FILE_NAME,
+                    NULL PARENT_NAME,
+                    NULL TYPE_NAME,
+                    NULL TYPE_DESCR,
+                    NULL MUSER_ID,
+                    NULL MTIME,
+                    NULL MUSER
+                    FROM    PODS.COMMENTS a
+                    JOIN
+                    PODS.PODS_TABLE b
+                    ON a.TABLE_ID = b.TABLE_ID  WHERE a.ID=:SYS_OBJ_ID and b.TABLE_NAME=:DB_TABLE_ID
+                    union all
+                    SELECT sg.GATE_ID,lg.LEFT_OBJ_ID,lg.RIGHT_OBJ_ID,lg.CTIME,usr.LOGIN AS USERNAME,ld.DESCR AS DESCR,ld.NAME AS NAME,ld.DOC_ID AS DOC_ID,ld.DOC_TYPE_ID AS DOC_TYPE_ID,ldv.DOC_VERSION_ID AS DOC_VERSION_ID,ldv.FILE_NAME AS FILE_NAME
+                    ,parentld.NAME AS PARENT_NAME,ldtr.NAME AS TYPE_NAME,ldtr.DESCR AS TYPE_DESCR,ld.MUSER_ID,ld.MTIME,musr.LOGIN AS MUSER
+                    FROM s_gate sg
+                    JOIN WEB50.LNK_GATE lg ON sg.GATE_ID = lg.GATE_ID
+                    JOIN WEB50.B_USER_PRIVATE usr ON usr.USER_ID=lg.CUSER_ID
+                    JOIN WEB50.LIB_DOC ld ON ld.DOC_ID = sg.OBJ_ID
+                    JOIN WEB50.LIB_DOC_TYPE_REF ldtr ON ld.DOC_TYPE_ID = ldtr.DOC_TYPE_ID
+                    LEFT OUTER JOIN WEB50.LIB_DOC_VERSION ldv ON ldv.DOC_ID = ld.DOC_ID
+                    LEFT OUTER JOIN WEB50.B_USER_PRIVATE musr ON musr.USER_ID=ld.MUSER_ID
+                    LEFT OUTER JOIN WEB50.LIB_DOC parentld ON parentld.DOC_ID=ld.PARENT_DOC_ID
+                    WHERE lg.LNK_TYPE_ID='3' AND (lg.LEFT_OBJ_ID=:SYS_FULL_ID or lg.RIGHT_OBJ_ID=:SYS_FULL_ID) ) x01
+                    order by CTIME
+                </query>
+            </dbQuery>
+        </select>
+        <insert>
+            <dbCommand>
+                <param name="ID" type="Int64" direction="Output" />
+                <param name="USER_ID" type="Int64" direction="Input" />
+                <param name="LEFT_OBJ_ID" type="String" direction="Input" />
+                <param name="RIGHT_OBJ_ID" type="String" direction="Input" />
+                <query>
+                    DECLARE v_same_id NUMBER;
+                    BEGIN
+                    /* не добавляем связь, если уже существует точно такая же, или если пытаемся добавить связь видеозаписи с треком, когда у этой видеозаписи уже есть связь с другим треком */
+                    SELECT COUNT(*) INTO v_same_id FROM WEB50.LNK_GATE WHERE LEFT_OBJ_ID=:LEFT_OBJ_ID AND
+                    (RIGHT_OBJ_ID=:RIGHT_OBJ_ID OR (LEFT_OBJ_ID in (select 'WEB50_LIB_DOC/'||TO_NUMBER(doc_id) FROM WEB50.LIB_DOC WHERE DOC_TYPE_ID=41) AND RIGHT_OBJ_ID LIKE 'WEB50_POI_TRACK/%' AND :RIGHT_OBJ_ID LIKE 'WEB50_POI_TRACK/%'));
+                    IF (v_same_id &gt; 0)
+                    THEN
+                    RAISE_APPLICATION_ERROR(-20701,'Невозможно добавить связь. Такая связь уже существует.');
+                    ELSE
+                    INSERT INTO WEB50.LNK_GATE (LEFT_OBJ_ID,RIGHT_OBJ_ID,LNK_TYPE_ID,CTIME,CUSER_ID,MTIME,MUSER_ID)
+                    VALUES (:LEFT_OBJ_ID,:RIGHT_OBJ_ID,3,sysdate,:USER_ID,NULL,NULL) RETURNING GATE_ID INTO :ID;
+                    END IF;
+                    END;
+                </query>
+            </dbCommand>
+        </insert>
+        <delete>
+            <dbCommand>
+                <param name="GATE_ID" type="Int64" direction="Input" />
+                <query>
+                    BEGIN   DELETE FROM WEB50.LNK_GATE WHERE GATE_ID=:GATE_ID;   END;
+                </query>
+            </dbCommand>
+        </delete>
+    </data>
   <data id="LIB_DOC_COMMENTS_BY_PARENT_LIST" comment="Запросы для получения списка прикрепленных документов по PARENT_DOC_ID объекта для новостной ленты">
     <select>
       <dbQuery idField="ID">

@@ -303,6 +303,31 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/xmls/PODS_SEM.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/xmls/PODS_SEM_DICT.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/xmls/SELECTION_GEO.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/xmls/SYS_SEM.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/xmls/WIDGET_SYS_SEM.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/xmls2/GAZPROM_SYS_SEM.xml">
           <value>
             <set />
@@ -364,6 +389,21 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/xmls2/PODS_SEM_DICT.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/xmls2/PODS_SEM_DICT_XXX.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/xmls2/SYS_SEM_XXX.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/xmls2/WIDGET_SYS_SEM_XXX.xml">
           <value>
             <set />
           </value>
