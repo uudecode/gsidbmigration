@@ -1,0 +1,181 @@
+2017-04-01 12:38:37 [main] INFO  ru.spb.trak.gsi.Application - Wonderfukk! We started at least!!!
+2017-04-01 12:38:38 [main] DEBUG ru.spb.trak.gsi.Query - Found 2 binds!
+2017-04-01 12:38:38 [main] DEBUG ru.spb.trak.gsi.Query - Changed query: 
+                    WITH granted_lpu
+                    AS (SELECT rf.value srv_district_id
+                    FROM web50.b_user_to_b_role u2r
+                    JOIN web50.b_role_to_b_policy r2p
+                    ON u2r.role_id = r2p.role_id
+                    JOIN web50.b_policy_rules pr
+                    ON r2p.policy_id = pr.policy_id
+                    JOIN web50.b_policy_rule_filters rf
+                    ON pr.rule_id = rf.rule_id
+                    WHERE user_id = ?
+                    AND pr.class_id = 'PODS_SRV_DISTRICT_GCL'
+                    AND rf.operator = '='),
+                    some_grants
+                    AS (SELECT 1
+                    FROM web50.b_user_to_b_role u2r
+                    JOIN web50.b_role_to_b_policy r2p
+                    ON u2r.role_id = r2p.role_id
+                    JOIN web50.b_policy_rules pr
+                    ON r2p.policy_id = pr.policy_id
+                    WHERE user_id = ?
+                    AND pr.class_id = 'PODS_SRV_DISTRICT_GCL' and pr.select_permitted::numeric > 0)
+                    SELECT CODE,DESCR
+                    FROM (
+                    SELECT srv_district_id CODE
+                    ,description DESCR
+                    ,CASE WHEN srv_district_id = 0
+                    THEN 1
+                    ELSE 0
+                    END sorter
+                    FROM pods.srv_district_gcl lpu
+                    WHERE (EXISTS (SELECT 1
+                    FROM granted_lpu gl
+                    WHERE (lpu.srv_district_id)::text = gl.srv_district_id)
+                    AND EXISTS (SELECT 1 FROM some_grants))
+                    OR NOT EXISTS (SELECT 1 FROM some_grants)) x01
+                    ORDER BY SORTER,LOWER(DESCR)
+                
+            
+2017-04-01 12:38:38 [main] INFO  ru.spb.trak.gsi.Query - Conection info: TEST
+2017-04-01 12:38:38 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\PODS_POLICY.xml] Table:[PODS_LPU]
+2017-04-01 12:38:38 [main] DEBUG ru.spb.trak.gsi.Query - var[LINE_ID_FILTER]:select line_id from pods.line 
+2017-04-01 12:38:38 [main] DEBUG ru.spb.trak.gsi.Query - Found 0 binds!
+2017-04-01 12:38:38 [main] DEBUG ru.spb.trak.gsi.Query - Changed query: 
+                    SELECT CODE, DESCR
+                    FROM ( SELECT CODE, DESCRIPTION DESCR
+                    ,CASE WHEN  CODE = 'UNKNOWN'
+                    THEN 1
+                    ELSE 0
+                    END SORTER
+                    FROM pods.route_type_cl rt
+                    WHERE EXISTS (SELECT 1
+                    FROM pods.route r
+                    WHERE r.type_cl = rt.code
+                    AND r.line_id IN (select line_id from pods.line))) x01
+                    ORDER BY SORTER,UPPER(DESCR)
+                
+            
+2017-04-01 12:38:38 [main] INFO  ru.spb.trak.gsi.Query - Conection info: TEST
+2017-04-01 12:38:38 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\PODS_POLICY.xml] Table:[PODS_ROUTE_TYPE]
+2017-04-01 12:38:38 [main] DEBUG ru.spb.trak.gsi.Query - Found 2 binds!
+2017-04-01 12:38:38 [main] DEBUG ru.spb.trak.gsi.Query - Changed query: 
+                    WITH granted_lpu
+                    AS (SELECT rf.value srv_district_id
+                    FROM web50.b_user_to_b_role u2r
+                    JOIN web50.b_role_to_b_policy r2p
+                    ON u2r.role_id = r2p.role_id
+                    JOIN web50.b_policy_rules pr
+                    ON r2p.policy_id = pr.policy_id
+                    JOIN web50.b_policy_rule_filters rf
+                    ON pr.rule_id = rf.rule_id
+                    WHERE user_id = ?
+                    AND pr.class_id = 'PODS_SRV_DISTRICT_GCL'
+                    AND rf.operator = '='),
+                    some_grants
+                    AS (SELECT 1
+                    FROM web50.b_user_to_b_role u2r
+                    JOIN web50.b_role_to_b_policy r2p
+                    ON u2r.role_id = r2p.role_id
+                    JOIN web50.b_policy_rules pr
+                    ON r2p.policy_id = pr.policy_id
+                    WHERE user_id = ?
+                    AND pr.class_id = 'PODS_SRV_DISTRICT_GCL' and pr.select_permitted::numeric > 0),
+                    good_lines
+                    AS (SELECT line_id
+                    ,line_id CODE
+                    ,CASE WHEN line_id = 0
+                    THEN 'Неизвестно'
+                    ELSE description
+                    END DESCR
+                    ,CASE WHEN line_id = 0
+                    THEN 1
+                    ELSE 0
+                    END sorter
+                    FROM pods.line ln
+                    WHERE ln.description IS NOT NULL)
+                    SELECT CODE,DESCR
+                    FROM
+                    (SELECT *
+                    FROM good_lines ln
+                    WHERE  ln.line_id = ANY (SELECT r.line_id
+                    FROM pods.route r
+                    JOIN pods.series s
+                    ON r.route_id = s.route_id
+                    JOIN pods.station_point sp
+                    ON sp.series_id = s.series_id
+                    JOIN pods.location l
+                    ON l.location_id = sp.location_id
+                    WHERE EXISTS (SELECT 1
+                    FROM granted_lpu gl
+                    WHERE gl.srv_district_id = (l.srv_district_gcl)::text))
+                    AND EXISTS (SELECT 1 FROM some_grants)
+                    UNION ALL
+                    SELECT *
+                    FROM good_lines ln
+                    WHERE NOT EXISTS (SELECT 1
+                    FROM pods.route r
+                    JOIN pods.series s
+                    ON r.route_id = s.route_id
+                    JOIN pods.station_point sp
+                    ON sp.series_id = s.series_id
+                    WHERE ln.line_id = r.line_id)
+                    OR NOT EXISTS (SELECT 1 FROM some_grants)) all_data
+                    ORDER BY SORTER,LOWER(DESCR)
+                
+            
+2017-04-01 12:38:38 [main] INFO  ru.spb.trak.gsi.Query - Conection info: TEST
+2017-04-01 12:38:49 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\PODS_POLICY.xml] Table:[PODS_LINE_ID]
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - var[LPU_ACCESS_FILTER]:SELECT srv_district_id FROM PODS.SRV_DISTRICT_GCL 
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - var[LINE_ID_FILTER]:select line_id from pods.line 
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - var[ROUTE_TYPE_FILTER]:SELECT code FROM pods.route_type_cl 
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - Found 0 binds!
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - Changed query: 
+                    SELECT CODE,DESCR
+                    FROM (
+                    SELECT srv_district_id CODE
+                    ,description DESCR
+                    ,CASE WHEN srv_district_id = 0
+                    THEN 1
+                    ELSE 0
+                    END sorter
+                    FROM pods.srv_district_gcl lpu
+                    WHERE  lpu.srv_district_id IN (SELECT srv_district_id FROM PODS.SRV_DISTRICT_GCL))   x01
+                    ORDER BY SORTER,LOWER(DESCR)
+                
+            
+2017-04-01 12:38:49 [main] INFO  ru.spb.trak.gsi.Query - Conection info: TEST
+2017-04-01 12:38:49 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\PODS_POLICY.xml] Table:[PODS_LPU_GRID]
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - var[LINE_ID_FILTER]:select line_id from pods.line 
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - var[ROUTE_TYPE_FILTER]:SELECT code FROM pods.route_type_cl 
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - Found 0 binds!
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - Changed query: 
+                    SELECT CODE, DESCR
+                    FROM ( SELECT CODE, DESCRIPTION DESCR
+                    ,CASE WHEN  CODE = 'UNKNOWN'
+                    THEN 1
+                    ELSE 0
+                    END SORTER
+                    FROM pods.route_type_cl rt
+                    WHERE code IN (SELECT code FROM pods.route_type_cl)) x01
+                    ORDER BY SORTER,UPPER(DESCR)
+                
+            
+2017-04-01 12:38:49 [main] INFO  ru.spb.trak.gsi.Query - Conection info: TEST
+2017-04-01 12:38:49 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\PODS_POLICY.xml] Table:[PODS_ROUTE_TYPE_GRID]
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - var[LPU_ACCESS_FILTER]:SELECT srv_district_id FROM PODS.SRV_DISTRICT_GCL 
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - var[LINE_ID_FILTER]:select line_id from pods.line 
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - var[ROUTE_TYPE_FILTER]:SELECT code FROM pods.route_type_cl 
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - Found 0 binds!
+2017-04-01 12:38:49 [main] DEBUG ru.spb.trak.gsi.Query - Changed query: 
+                    SELECT LINE_ID AS CODE, DESCRIPTION AS DESCR
+                    FROM PODS.LINE
+                    WHERE DESCRIPTION IS NOT NULL AND LINE_ID IN (select line_id from pods.line)
+                    ORDER BY LOWER(DESCRIPTION)
+                
+            
+2017-04-01 12:38:49 [main] INFO  ru.spb.trak.gsi.Query - Conection info: TEST
+2017-04-01 12:38:49 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\PODS_POLICY.xml] Table:[PODS_LINE_GRID]
+2017-04-01 12:38:49 [main] INFO  ru.spb.trak.gsi.Application - Lol, I came.

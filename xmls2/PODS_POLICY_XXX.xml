@@ -24,7 +24,7 @@ WITH granted_lpu
                JOIN web50.b_policy_rules pr
                  ON r2p.policy_id = pr.policy_id 
         WHERE user_id = :USER_ID
-          AND pr.class_id = 'PODS_SRV_DISTRICT_GCL' and pr.select_permitted &gt; 0)
+          AND pr.class_id = 'PODS_SRV_DISTRICT_GCL' and pr.select_permitted::numeric &gt; 0)
 SELECT CODE,DESCR
   FROM (                     
 SELECT srv_district_id CODE
@@ -36,9 +36,9 @@ SELECT srv_district_id CODE
   FROM pods.srv_district_gcl lpu
  WHERE (EXISTS (SELECT 1
                  FROM granted_lpu gl
-                WHERE TO_CHAR(lpu.srv_district_id) = gl.srv_district_id)
+                WHERE (lpu.srv_district_id)::text = gl.srv_district_id)
         AND EXISTS (SELECT 1 FROM some_grants))
-    OR NOT EXISTS (SELECT 1 FROM some_grants))
+    OR NOT EXISTS (SELECT 1 FROM some_grants)) x01
 ORDER BY SORTER,LOWER(DESCR)
           </query>
       </dbQuery>
@@ -60,7 +60,7 @@ SELECT CODE, DESCR
           WHERE EXISTS (SELECT 1
                  FROM pods.route r
                 WHERE r.type_cl = rt.code
-                  AND r.line_id IN ({LINE_ID_FILTER})))
+                  AND r.line_id IN ({LINE_ID_FILTER}))) x01
   ORDER BY SORTER,UPPER(DESCR)   
        </query>
       </dbQuery>
@@ -93,7 +93,7 @@ WITH granted_lpu
                JOIN web50.b_policy_rules pr
                  ON r2p.policy_id = pr.policy_id 
         WHERE user_id = :USER_ID
-          AND pr.class_id = 'PODS_SRV_DISTRICT_GCL' and pr.select_permitted &gt; 0),
+          AND pr.class_id = 'PODS_SRV_DISTRICT_GCL' and pr.select_permitted::numeric &gt; 0),
     good_lines
     AS (SELECT line_id 
               ,line_id CODE
@@ -121,7 +121,7 @@ SELECT CODE,DESCR
                                       ON l.location_id = sp.location_id
                              WHERE EXISTS (SELECT 1
                                              FROM granted_lpu gl
-                                            WHERE gl.srv_district_id = TO_CHAR(l.srv_district_gcl)))
+                                            WHERE gl.srv_district_id = (l.srv_district_gcl)::text))
             AND EXISTS (SELECT 1 FROM some_grants)  
 UNION ALL
 SELECT *
@@ -157,7 +157,7 @@ SELECT srv_district_id CODE
             ELSE 0
        END sorter     
   FROM pods.srv_district_gcl lpu
- WHERE  lpu.srv_district_id IN ({LPU_ACCESS_FILTER}))  
+ WHERE  lpu.srv_district_id IN ({LPU_ACCESS_FILTER}))   x01
 ORDER BY SORTER,LOWER(DESCR)
           </query>
       </dbQuery>
@@ -177,7 +177,7 @@ SELECT CODE, DESCR
                       ELSE 0
                  END SORTER
            FROM pods.route_type_cl rt
-          WHERE code IN ({ROUTE_TYPE_FILTER}))
+          WHERE code IN ({ROUTE_TYPE_FILTER})) x01
   ORDER BY SORTER,UPPER(DESCR)   
        </query>
       </dbQuery>
