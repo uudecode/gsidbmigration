@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="trak at testor">
+  <database-model serializer="dbm" rdbms="ORACLE" format-version="4.0">
+    <root id="1"/>
+    <schema id="2" parent="1" name="TRAK">
+      <ObjectId>228</ObjectId>
+      <IntrospectionTimestamp>2017-03-16.09:55:34</IntrospectionTimestamp>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="PUBLIC">
+      <ObjectId>1</ObjectId>
+    </schema>
+    <schema id="4" parent="1" name="SYS">
+      <ObjectId>0</ObjectId>
+    </schema>
+    <schema id="5" parent="1" name="SYSTEM">
+      <ObjectId>5</ObjectId>
+    </schema>
+    <schema id="6" parent="1" name="OUTLN">
+      <ObjectId>11</ObjectId>
+    </schema>
+    <schema id="7" parent="1" name="DIP">
+      <ObjectId>19</ObjectId>
+    </schema>
+    <schema id="8" parent="1" name="TSMSYS">
+      <ObjectId>21</ObjectId>
+    </schema>
+    <schema id="9" parent="1" name="DBSNMP">
+      <ObjectId>24</ObjectId>
+    </schema>
+    <schema id="10" parent="1" name="WMSYS">
+      <ObjectId>25</ObjectId>
+    </schema>
+    <schema id="11" parent="1" name="EXFSYS">
+      <ObjectId>34</ObjectId>
+    </schema>
+    <schema id="12" parent="1" name="XDB">
+      <ObjectId>35</ObjectId>
+    </schema>
+    <schema id="13" parent="1" name="ANONYMOUS">
+      <ObjectId>36</ObjectId>
+    </schema>
+    <schema id="14" parent="1" name="ORDSYS">
+      <ObjectId>40</ObjectId>
+    </schema>
+    <schema id="15" parent="1" name="ORDPLUGINS">
+      <ObjectId>41</ObjectId>
+    </schema>
+    <schema id="16" parent="1" name="SI_INFORMTN_SCHEMA">
+      <ObjectId>42</ObjectId>
+    </schema>
+    <schema id="17" parent="1" name="MDSYS">
+      <ObjectId>43</ObjectId>
+    </schema>
+    <schema id="18" parent="1" name="OLAPSYS">
+      <ObjectId>44</ObjectId>
+    </schema>
+    <schema id="19" parent="1" name="MDDATA">
+      <ObjectId>47</ObjectId>
+    </schema>
+    <schema id="20" parent="1" name="SYSMAN">
+      <ObjectId>48</ObjectId>
+    </schema>
+    <schema id="21" parent="1" name="MGMT_VIEW">
+      <ObjectId>49</ObjectId>
+    </schema>
+    <schema id="22" parent="1" name="BOCHKOV">
+      <ObjectId>50</ObjectId>
+    </schema>
+    <schema id="23" parent="1" name="GIS_T50">
+      <ObjectId>51</ObjectId>
+    </schema>
+    <schema id="24" parent="1" name="MAPINFO_T50">
+      <ObjectId>52</ObjectId>
+    </schema>
+    <schema id="25" parent="1" name="MAPINFO">
+      <ObjectId>54</ObjectId>
+    </schema>
+    <schema id="26" parent="1" name="ABASHEVAN">
+      <ObjectId>55</ObjectId>
+    </schema>
+    <schema id="27" parent="1" name="ABDRAHIMOVNF">
+      <ObjectId>56</ObjectId>
+    </schema>
+    <schema id="28" parent="1" name="ABELENTSEVVN">
+      <ObjectId>57</ObjectId>
+    </schema>
+    <schema id="29" parent="1" name="ADMIN">
+      <ObjectId>58</ObjectId>
+    </schema>
+    <schema id="30" parent="1" name="AHMAROV">
+      <ObjectId>59</ObjectId>
+    </schema>
+    <schema id="31" parent="1" name="AHMETOV_AR">
+      <ObjectId>60</ObjectId>
+    </schema>
+    <schema id="32" parent="1" name="ANIKINMI">
+      <ObjectId>61</ObjectId>
+    </schema>
+    <schema id="33" parent="1" name="ANTIPANOVSN">
+      <ObjectId>62</ObjectId>
+    </schema>
+    <schema id="34" parent="1" name="ARTUHINAV">
+      <ObjectId>63</ObjectId>
+    </schema>
+    <schema id="35" parent="1" name="BABAEV_VI">
+      <ObjectId>64</ObjectId>
+    </schema>
+    <schema id="36" parent="1" name="BABKINAB">
+      <ObjectId>65</ObjectId>
+    </schema>
+    <schema id="37" parent="1" name="BATALOV_BA">
+      <ObjectId>66</ObjectId>
+    </schema>
+    <schema id="38" parent="1" name="BOEV_VI">
+      <ObjectId>67</ObjectId>
+    </schema>
+    <schema id="39" parent="1" name="BOLYOV_VP">
+      <ObjectId>68</ObjectId>
+    </schema>
+    <schema id="40" parent="1" name="BORISOVAA">
+      <ObjectId>69</ObjectId>
+    </schema>
+    <schema id="41" parent="1" name="BOYKO_MV">
+      <ObjectId>70</ObjectId>
+    </schema>
+    <schema id="42" parent="1" name="CHAGINAO">
+      <ObjectId>71</ObjectId>
+    </schema>
+    <schema id="43" parent="1" name="DERUSHEVKO">
+      <ObjectId>72</ObjectId>
+    </schema>
+    <schema id="44" parent="1" name="DIN_42">
+      <ObjectId>73</ObjectId>
+    </schema>
+    <schema id="45" parent="1" name="DOLGORUKOVMU">
+      <ObjectId>74</ObjectId>
+    </schema>
+    <schema id="46" parent="1" name="DYOMINAV">
+      <ObjectId>75</ObjectId>
+    </schema>
+    <schema id="47" parent="1" name="EFIMOVDG">
+      <ObjectId>76</ObjectId>
+    </schema>
+    <schema id="48" parent="1" name="EGOROVVS">
+      <ObjectId>77</ObjectId>
+    </schema>
+    <schema id="49" parent="1" name="EGOVTSEV">
+      <ObjectId>78</ObjectId>
+    </schema>
+    <schema id="50" parent="1" name="EMELIANOVVV">
+      <ObjectId>79</ObjectId>
+    </schema>
+    <schema id="51" parent="1" name="FEDOSEEVAS">
+      <ObjectId>80</ObjectId>
+    </schema>
+    <schema id="52" parent="1" name="GABBASOVA">
+      <ObjectId>81</ObjectId>
+    </schema>
+    <schema id="53" parent="1" name="GABIFLU">
+      <ObjectId>82</ObjectId>
+    </schema>
+    <schema id="54" parent="1" name="GAIFULLIN">
+      <ObjectId>83</ObjectId>
+    </schema>
+    <schema id="55" parent="1" name="GGG">
+      <ObjectId>84</ObjectId>
+    </schema>
+    <schema id="56" parent="1" name="GILEVSA">
+      <ObjectId>85</ObjectId>
+    </schema>
+    <schema id="57" parent="1" name="GIS_PERF">
+      <ObjectId>86</ObjectId>
+    </schema>
+    <schema id="58" parent="1" name="GOLOVENKOSN">
+      <ObjectId>87</ObjectId>
+    </schema>
+    <schema id="59" parent="1" name="GORBUNOVAMI">
+      <ObjectId>88</ObjectId>
+    </schema>
+    <schema id="60" parent="1" name="GRIBOVAA">
+      <ObjectId>89</ObjectId>
+    </schema>
+    <schema id="61" parent="1" name="GRUSHKINAV">
+      <ObjectId>90</ObjectId>
+    </schema>
+    <schema id="62" parent="1" name="HABIBULLINIR">
+      <ObjectId>91</ObjectId>
+    </schema>
+    <schema id="63" parent="1" name="HALTURINSV">
+      <ObjectId>92</ObjectId>
+    </schema>
+    <schema id="64" parent="1" name="HARISOV">
+      <ObjectId>93</ObjectId>
+    </schema>
+    <schema id="65" parent="1" name="HASANOVRN">
+      <ObjectId>94</ObjectId>
+    </schema>
+    <schema id="66" parent="1" name="HATYPOV_DZ">
+      <ObjectId>95</ObjectId>
+    </schema>
+    <schema id="67" parent="1" name="IVANKOVVG">
+      <ObjectId>96</ObjectId>
+    </schema>
+    <schema id="68" parent="1" name="IVANOV">
+      <ObjectId>97</ObjectId>
+    </schema>
+    <schema id="69" parent="1" name="IVANOVLA">
+      <ObjectId>98</ObjectId>
+    </schema>
+    <schema id="70" parent="1" name="IVANOVOA">
+      <ObjectId>99</ObjectId>
+    </schema>
+    <schema id="71" parent="1" name="IVANOVUA">
+      <ObjectId>100</ObjectId>
+    </schema>
+    <schema id="72" parent="1" name="IVASCHENKOUN">
+      <ObjectId>101</ObjectId>
+    </schema>
+    <schema id="73" parent="1" name="KALABINIY">
+      <ObjectId>102</ObjectId>
+    </schema>
+    <schema id="74" parent="1" name="KASHINAM">
+      <ObjectId>103</ObjectId>
+    </schema>
+    <schema id="75" parent="1" name="KAYDOSHKO_AN">
+      <ObjectId>104</ObjectId>
+    </schema>
+    <schema id="76" parent="1" name="KOCHARYAN">
+      <ObjectId>105</ObjectId>
+    </schema>
+    <schema id="77" parent="1" name="KOLEGOV">
+      <ObjectId>106</ObjectId>
+    </schema>
+    <schema id="78" parent="1" name="KONOVALOVAN">
+      <ObjectId>107</ObjectId>
+    </schema>
+    <schema id="79" parent="1" name="KOROSTELEVNA">
+      <ObjectId>108</ObjectId>
+    </schema>
+    <schema id="80" parent="1" name="KOROTKOVUA">
+      <ObjectId>109</ObjectId>
+    </schema>
+    <schema id="81" parent="1" name="KOSACHEVAN">
+      <ObjectId>110</ObjectId>
+    </schema>
+    <schema id="82" parent="1" name="KRUSANOVOA">
+      <ObjectId>111</ObjectId>
+    </schema>
+    <schema id="83" parent="1" name="KUCHUMOVATN">
+      <ObjectId>112</ObjectId>
+    </schema>
+    <schema id="84" parent="1" name="KULAKOVAV">
+      <ObjectId>113</ObjectId>
+    </schema>
+    <schema id="85" parent="1" name="KUROCHKINSM">
+      <ObjectId>114</ObjectId>
+    </schema>
+    <schema id="86" parent="1" name="KURTAEVAA">
+      <ObjectId>115</ObjectId>
+    </schema>
+    <schema id="87" parent="1" name="KURTAEVAER">
+      <ObjectId>116</ObjectId>
+    </schema>
+    <schema id="88" parent="1" name="KUTYREVAN">
+      <ObjectId>117</ObjectId>
+    </schema>
+    <schema id="89" parent="1" name="KUZNECOV_SI">
+      <ObjectId>118</ObjectId>
+    </schema>
+    <schema id="90" parent="1" name="KYTYREVAI">
+      <ObjectId>119</ObjectId>
+    </schema>
+    <schema id="91" parent="1" name="LAVRENOVUM">
+      <ObjectId>120</ObjectId>
+    </schema>
+    <schema id="92" parent="1" name="LEDACHKOVAV">
+      <ObjectId>121</ObjectId>
+    </schema>
+    <schema id="93" parent="1" name="LEONTIEVON">
+      <ObjectId>122</ObjectId>
+    </schema>
+    <schema id="94" parent="1" name="LUKANINAV">
+      <ObjectId>123</ObjectId>
+    </schema>
+    <schema id="95" parent="1" name="LUSTOVVI">
+      <ObjectId>124</ObjectId>
+    </schema>
+    <schema id="96" parent="1" name="MAKODRAYDP">
+      <ObjectId>125</ObjectId>
+    </schema>
+    <schema id="97" parent="1" name="MAMOTOV">
+      <ObjectId>126</ObjectId>
+    </schema>
+    <schema id="98" parent="1" name="MARAMIGINDV">
+      <ObjectId>127</ObjectId>
+    </schema>
+    <schema id="99" parent="1" name="MAXIMOVLA">
+      <ObjectId>128</ObjectId>
+    </schema>
+    <schema id="100" parent="1" name="MEREZHNIKOV_SP">
+      <ObjectId>129</ObjectId>
+    </schema>
+    <schema id="101" parent="1" name="METELEVAN">
+      <ObjectId>130</ObjectId>
+    </schema>
+    <schema id="102" parent="1" name="MISHLANOVEN">
+      <ObjectId>131</ObjectId>
+    </schema>
+    <schema id="103" parent="1" name="MOROZOVAIS">
+      <ObjectId>132</ObjectId>
+    </schema>
+    <schema id="104" parent="1" name="MOSTOVOYAV">
+      <ObjectId>133</ObjectId>
+    </schema>
+    <schema id="105" parent="1" name="MUSINRF">
+      <ObjectId>134</ObjectId>
+    </schema>
+    <schema id="106" parent="1" name="MUSTAFIN_FL">
+      <ObjectId>135</ObjectId>
+    </schema>
+    <schema id="107" parent="1" name="MYASNIKOVVV">
+      <ObjectId>136</ObjectId>
+    </schema>
+    <schema id="108" parent="1" name="NEGREYVA">
+      <ObjectId>137</ObjectId>
+    </schema>
+    <schema id="109" parent="1" name="NESTEROV_VD">
+      <ObjectId>138</ObjectId>
+    </schema>
+    <schema id="110" parent="1" name="NEVOLINA_SF">
+      <ObjectId>139</ObjectId>
+    </schema>
+    <schema id="111" parent="1" name="NURMATOV_RI">
+      <ObjectId>140</ObjectId>
+    </schema>
+    <schema id="112" parent="1" name="PARAMONOVMA">
+      <ObjectId>141</ObjectId>
+    </schema>
+    <schema id="113" parent="1" name="PARSHAKOVAA">
+      <ObjectId>142</ObjectId>
+    </schema>
+    <schema id="114" parent="1" name="PASHKOV_AM">
+      <ObjectId>143</ObjectId>
+    </schema>
+    <schema id="115" parent="1" name="PODUKOVOG">
+      <ObjectId>144</ObjectId>
+    </schema>
+    <schema id="116" parent="1" name="POGUDIN_VL">
+      <ObjectId>145</ObjectId>
+    </schema>
+    <schema id="117" parent="1" name="POLISHINAA">
+      <ObjectId>146</ObjectId>
+    </schema>
+    <schema id="118" parent="1" name="PONOMAREVSA">
+      <ObjectId>147</ObjectId>
+    </schema>
+    <schema id="119" parent="1" name="POPOVAA">
+      <ObjectId>148</ObjectId>
+    </schema>
+    <schema id="120" parent="1" name="PTG_WEB">
+      <ObjectId>149</ObjectId>
+    </schema>
+    <schema id="121" parent="1" name="PUTINCEV_VE">
+      <ObjectId>150</ObjectId>
+    </schema>
+    <schema id="122" parent="1" name="RENEV_NM">
+      <ObjectId>151</ObjectId>
+    </schema>
+    <schema id="123" parent="1" name="RESHSERV">
+      <ObjectId>152</ObjectId>
+    </schema>
+    <schema id="124" parent="1" name="RODIGINAV">
+      <ObjectId>153</ObjectId>
+    </schema>
+    <schema id="125" parent="1" name="SARYCHEV_AN">
+      <ObjectId>154</ObjectId>
+    </schema>
+    <schema id="126" parent="1" name="SAZONOVVN">
+      <ObjectId>155</ObjectId>
+    </schema>
+    <schema id="127" parent="1" name="SEMENOVSS">
+      <ObjectId>156</ObjectId>
+    </schema>
+    <schema id="128" parent="1" name="SHAMGUNOVRF">
+      <ObjectId>157</ObjectId>
+    </schema>
+    <schema id="129" parent="1" name="SHARAVEVOM">
+      <ObjectId>158</ObjectId>
+    </schema>
+    <schema id="130" parent="1" name="SHARIPOV">
+      <ObjectId>159</ObjectId>
+    </schema>
+    <schema id="131" parent="1" name="SHAVRIN_VT">
+      <ObjectId>160</ObjectId>
+    </schema>
+    <schema id="132" parent="1" name="SHELGUNOVSN">
+      <ObjectId>161</ObjectId>
+    </schema>
+    <schema id="133" parent="1" name="SHERETOVAI">
+      <ObjectId>162</ObjectId>
+    </schema>
+    <schema id="134" parent="1" name="SHEVELYOVVV">
+      <ObjectId>163</ObjectId>
+    </schema>
+    <schema id="135" parent="1" name="SHIPULINVV">
+      <ObjectId>164</ObjectId>
+    </schema>
+    <schema id="136" parent="1" name="SHIRYAEV_VV">
+      <ObjectId>165</ObjectId>
+    </schema>
+    <schema id="137" parent="1" name="SHKAPENKOAA">
+      <ObjectId>166</ObjectId>
+    </schema>
+    <schema id="138" parent="1" name="SHMIRINUA">
+      <ObjectId>167</ObjectId>
+    </schema>
+    <schema id="139" parent="1" name="SHOLOHOVVS">
+      <ObjectId>168</ObjectId>
+    </schema>
+    <schema id="140" parent="1" name="SHUKINAU">
+      <ObjectId>169</ObjectId>
+    </schema>
+    <schema id="141" parent="1" name="SHUKINDA">
+      <ObjectId>170</ObjectId>
+    </schema>
+    <schema id="142" parent="1" name="SHUMILINAV">
+      <ObjectId>171</ObjectId>
+    </schema>
+    <schema id="143" parent="1" name="SIDORENKOAA">
+      <ObjectId>172</ObjectId>
+    </schema>
+    <schema id="144" parent="1" name="SIRAZHEV_MM">
+      <ObjectId>173</ObjectId>
+    </schema>
+    <schema id="145" parent="1" name="SIZOV_VV">
+      <ObjectId>174</ObjectId>
+    </schema>
+    <schema id="146" parent="1" name="STARCEVVA">
+      <ObjectId>175</ObjectId>
+    </schema>
+    <schema id="147" parent="1" name="STARKOVNA">
+      <ObjectId>176</ObjectId>
+    </schema>
+    <schema id="148" parent="1" name="SULTANGARRH">
+      <ObjectId>177</ObjectId>
+    </schema>
+    <schema id="149" parent="1" name="SUSLOPAROV">
+      <ObjectId>178</ObjectId>
+    </schema>
+    <schema id="150" parent="1" name="TASKAEVAS">
+      <ObjectId>179</ObjectId>
+    </schema>
+    <schema id="151" parent="1" name="TERENTIEVIA">
+      <ObjectId>180</ObjectId>
+    </schema>
+    <schema id="152" parent="1" name="TEST">
+      <ObjectId>181</ObjectId>
+    </schema>
+    <schema id="153" parent="1" name="TEST2">
+      <ObjectId>182</ObjectId>
+    </schema>
+    <schema id="154" parent="1" name="TEST42">
+      <ObjectId>183</ObjectId>
+    </schema>
+    <schema id="155" parent="1" name="TSAPKINA">
+      <ObjectId>184</ObjectId>
+    </schema>
+    <schema id="156" parent="1" name="TURAHANOV_IR">
+      <ObjectId>185</ObjectId>
+    </schema>
+    <schema id="157" parent="1" name="TYULKIN_RR">
+      <ObjectId>186</ObjectId>
+    </schema>
+    <schema id="158" parent="1" name="URABOVML">
+      <ObjectId>187</ObjectId>
+    </schema>
+    <schema id="159" parent="1" name="VAVAEV_AA">
+      <ObjectId>188</ObjectId>
+    </schema>
+    <schema id="160" parent="1" name="VLADIMIROVSU">
+      <ObjectId>189</ObjectId>
+    </schema>
+    <schema id="161" parent="1" name="WEB">
+      <ObjectId>190</ObjectId>
+    </schema>
+    <schema id="162" parent="1" name="WEB5">
+      <ObjectId>191</ObjectId>
+    </schema>
+    <schema id="163" parent="1" name="WEB_ADMIN">
+      <ObjectId>192</ObjectId>
+    </schema>
+    <schema id="164" parent="1" name="WSP_PTG">
+      <ObjectId>193</ObjectId>
+    </schema>
+    <schema id="165" parent="1" name="YUGOVGS">
+      <ObjectId>194</ObjectId>
+    </schema>
+    <schema id="166" parent="1" name="ZAMARAEVAM">
+      <ObjectId>195</ObjectId>
+    </schema>
+    <schema id="167" parent="1" name="ZAYDULLIN_GZ">
+      <ObjectId>196</ObjectId>
+    </schema>
+    <schema id="168" parent="1" name="ZHELUDKOVSA">
+      <ObjectId>197</ObjectId>
+    </schema>
+    <schema id="169" parent="1" name="GIS_LOADOBJ">
+      <ObjectId>198</ObjectId>
+    </schema>
+    <schema id="170" parent="1" name="PODSM">
+      <ObjectId>199</ObjectId>
+    </schema>
+    <schema id="171" parent="1" name="EXCHANGE_PODS">
+      <ObjectId>203</ObjectId>
+    </schema>
+    <schema id="172" parent="1" name="EXCHANGE_WEB50">
+      <ObjectId>204</ObjectId>
+    </schema>
+    <schema id="173" parent="1" name="WEB_SYS_53">
+      <ObjectId>205</ObjectId>
+    </schema>
+    <schema id="174" parent="1" name="OLGA_DBA">
+      <ObjectId>214</ObjectId>
+    </schema>
+    <schema id="175" parent="1" name="MDSYS_DUMPER">
+      <ObjectId>218</ObjectId>
+    </schema>
+    <schema id="176" parent="1" name="GIS_INTEGRATION50">
+      <ObjectId>220</ObjectId>
+    </schema>
+    <schema id="177" parent="1" name="FLOW_CHART">
+      <ObjectId>222</ObjectId>
+    </schema>
+    <schema id="178" parent="1" name="PODS_VLG">
+      <ObjectId>223</ObjectId>
+    </schema>
+    <schema id="179" parent="1" name="PODS_TTG">
+      <ObjectId>224</ObjectId>
+    </schema>
+    <schema id="180" parent="1" name="PODS">
+      <ObjectId>226</ObjectId>
+    </schema>
+    <schema id="181" parent="1" name="WEB50">
+      <ObjectId>227</ObjectId>
+    </schema>
+  </database-model>
+</dataSource>

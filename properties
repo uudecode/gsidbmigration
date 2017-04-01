@@ -1,0 +1,10 @@
+xml.dir = xmls2
+xml.mask = PODS_GRID_XXX.xml
+db.host = 10.254.3.100
+db.port = 15432
+db.name = TEST
+db.user = postgres
+db.password = gfhjkmubc
+db.socketTimeout = 1200
+db.connectTimeout = 1200
+output.excel = outX.xlsx

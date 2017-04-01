@@ -1,0 +1,134 @@
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlQuery - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[GET_CLIENT_SETTINGS] Reason we don't give a mind about xmlQuery.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[GET_CLIENT_SETTINGS] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[GET_CLIENT_SETTINGS_CNT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[CLEAR_LAYER] DbCommand not supported yet
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlQuery - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_ROLE_TASKS_XML] Reason we don't give a mind about xmlQuery.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_ROLE_TASKS_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_ROLE_TASKS_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_ROLE_TASKS_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[COPY_ROLE_TASKS_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlQuery - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_STYLE_XML] Reason we don't give a mind about xmlQuery.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_STYLE_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_STYLE_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_STYLE_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlQuery - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_LAYER_XML] Reason we don't give a mind about xmlQuery.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_LAYER_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_LAYER_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_LAYER_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlQuery - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_DATA_XML] Reason we don't give a mind about xmlQuery.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_DATA_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_DATA_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[EDIT_DATA_XML] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlQuery - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[LAYER_XML_EXIST] Reason we don't give a mind about xmlQuery.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlQuery - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[DATA_XML_EXIST] Reason we don't give a mind about xmlQuery.
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_ROLES] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_USER_PRIVATE_EXPORT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_USER_PRIVATE] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_USER_PRIVATE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_USER_PRIVATE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_USER_PRIVATE_CNT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_B_USER_PRIVATE] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_B_USER_PRIVATE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_B_USER_PRIVATE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_B_USER_PRIVATE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_USER_TO_ROLE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_USER_TO_ROLE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_ROLE] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_ROLE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_ROLE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_ROLE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_ROLE_CNT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_AUDIT_EVENT_CATEGORY] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_AUDIT_EVENT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_AUDIT_EVENT] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_AUDIT_EVENT_CNT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_LOG_SEVERITY_REF] DbQuery not supported yet
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[WEB50_M_MAP] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] INFO  ru.spb.trak.gsi.XmlCommand - QUERY OK! File: [xmls\ADM_SEM.xml] Table:[WEB50_M_MAP] Reason we don't give a mind about xmlCommand.
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_ROLE_TO_POLICY] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_ROLE_TO_POLICY] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_CNT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_RULES] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_RULES] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_RULES] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_RULES] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_RULE_FILTERS] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_RULE_FILTERS] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_RULE_FILTERS] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_B_POLICY_RULE_FILTERS] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[FIRST_DOCS] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[FIRST_DOCS_CNT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[DOCS_BY_PARENT] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[DOCUMENT_OPEN] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[DOCUMENT_DELETE] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[WEB50_LIB_MIME_TYPE_REF] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC_FOLDER] DbQuery not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC_FOLDER] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC_FOLDER] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC_FOLDER] DbCommand not supported yet
+2017-01-27 11:19:05 [main] ERROR ru.spb.trak.gsi.DbCommand - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_DOC_LINK_FOLDER] DbCommand not supported yet
+2017-01-27 11:19:06 [main] ERROR ru.spb.trak.gsi.Query - QUERY ERROR! File: [xmls\ADM_SEM.xml] Table:[ADM_LIB_COVERAGE] 
+2017-01-27 11:19:19 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[COUNTY_BOUNDARY]
+2017-01-27 11:19:19 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[TOWNSHIP_BOUNDARY]
+2017-01-27 11:19:19 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[LEGACY_LINE_BOUNDARY]
+2017-01-27 11:19:20 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[LAND_USE]
+2017-01-27 11:19:20 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[ACTIVITY_ZONE]
+2017-01-27 11:19:20 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[SRV_DISTRICT_BOUNDARY]
+2017-01-27 11:19:20 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[OWNER_OPERATOR_RANGE]
+2017-01-27 11:19:21 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[TAX_DISTRICT_BOUNDARY]
+2017-01-27 11:19:21 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[STATUS_RANGE]
+2017-01-27 11:19:21 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[DEPTH_OF_COVER]
+2017-01-27 11:19:21 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[FLOW_DIRECTION_RANGE]
+2017-01-27 11:19:22 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[PRODUCT_RANGE]
+2017-01-27 11:19:22 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[HCA_BOUNDARY]
+2017-01-27 11:19:22 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[PIPE_SYSTEM_BOUNDARY]
+2017-01-27 11:19:23 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[ODORANT_RANGE]
+2017-01-27 11:19:23 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[CATHODIC_PROTECTION_RANGE]
+2017-01-27 11:19:23 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_BOUND_GEO.xml] Table:[ILI_RANGE]
+2017-01-27 11:19:23 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_PS_ON]
+2017-01-27 11:19:23 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_PS_ON_FIRST] DbQuery not supported yet
+2017-01-27 11:19:23 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_PS_OFF]
+2017-01-27 11:19:23 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_PS_OFF_FIRST] DbQuery not supported yet
+2017-01-27 11:19:23 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_DC_POTENTIAL_VOLTS]
+2017-01-27 11:19:23 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_DC_POTENTIAL_VOLTS_FIRST] DbQuery not supported yet
+2017-01-27 11:19:23 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_STATIC]
+2017-01-27 11:19:23 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_STATIC_FIRST] DbQuery not supported yet
+2017-01-27 11:19:23 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_PS_ON]
+2017-01-27 11:19:23 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_PS_ON_FIRST] DbQuery not supported yet
+2017-01-27 11:19:24 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_PS_OFF]
+2017-01-27 11:19:24 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_PS_OFF_FIRST] DbQuery not supported yet
+2017-01-27 11:19:24 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_POTENTIAL_READING]
+2017-01-27 11:19:24 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_POTENTIAL_READING_FIRST] DbQuery not supported yet
+2017-01-27 11:19:24 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_CURRENT_READING]
+2017-01-27 11:19:24 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_CURRENT_READING_FIRST] DbQuery not supported yet
+2017-01-27 11:19:24 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_RESISTANCE_READING]
+2017-01-27 11:52:52 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_PS_ON]
+2017-01-27 11:52:52 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_PS_ON_FIRST] DbQuery not supported yet
+2017-01-27 11:52:52 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_PS_OFF]
+2017-01-27 11:52:52 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_PS_OFF_FIRST] DbQuery not supported yet
+2017-01-27 11:52:52 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_DC_POTENTIAL_VOLTS]
+2017-01-27 11:52:52 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_DC_POTENTIAL_VOLTS_FIRST] DbQuery not supported yet
+2017-01-27 11:52:53 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_STATIC]
+2017-01-27 11:52:53 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_STATIC_FIRST] DbQuery not supported yet
+2017-01-27 11:52:53 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_PS_ON]
+2017-01-27 11:52:53 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_PS_ON_FIRST] DbQuery not supported yet
+2017-01-27 11:52:53 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_PS_OFF]
+2017-01-27 11:52:53 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_PS_OFF_FIRST] DbQuery not supported yet
+2017-01-27 11:52:53 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_POTENTIAL_READING]
+2017-01-27 11:52:53 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_POTENTIAL_READING_FIRST] DbQuery not supported yet
+2017-01-27 11:52:53 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_CURRENT_READING]
+2017-01-27 11:52:53 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_CURRENT_READING_FIRST] DbQuery not supported yet
+2017-01-27 11:52:53 [main] INFO  ru.spb.trak.gsi.Query - QUERY OK! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_RESISTANCE_READING]
+2017-01-27 11:52:53 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls\CAS_PODS_CAS_CP_GEO.xml] Table:[CAS_PI_CP_RESISTANCE_READING_FIRST] DbQuery not supported yet
+2017-01-27 11:58:00 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls2\CAS_PODS_CAS_CP_SEM.xml] Table:[PI_PS_ON] DbQuery not supported yet
+2017-01-27 11:58:00 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls2\CAS_PODS_CAS_CP_SEM.xml] Table:[PI_CP_PS_ON] DbQuery not supported yet
+2017-01-27 11:58:00 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls2\CAS_PODS_CAS_CP_SEM.xml] Table:[PI_CP_PS_OFF] DbQuery not supported yet
+2017-01-27 11:58:00 [main] ERROR ru.spb.trak.gsi.DbQuery - QUERY ERROR! File: [xmls2\CAS_PODS_CAS_CP_SEM.xml] Table:[PI_DC_POTENTIAL_READING] DbQuery not supported yet

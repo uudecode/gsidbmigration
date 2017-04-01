@@ -1,0 +1,1053 @@
+﻿<root version="6.0.1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <!-- Список LINE без нулевой записи "Объект не лежит на оси трубопровода" (для фильтра ROUTES по LINE) -->
+  <data id="PODS_LINE_WITHOUT_DEFAULT" comment="PODS.LINE" schema="PODS" table="LINE">
+    <select>
+      <dbQuery idField="ID">
+        <query>SELECT LINE_ID AS CODE, DESCRIPTION AS DESCR FROM PODS.LINE WHERE LINE_ID!=0 AND DESCRIPTION IS NOT NULL ORDER BY DESCR</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список отфильтрованных ROUTE -->
+  <data id="PODS_ROUTE" comment="PODS.ROUTE" schema="PODS" table="ROUTE">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>
+			SELECT * FROM (SELECT
+			r.ROUTE_ID ID
+			,r.ROUTE_ID
+			,r.TYPE_CL
+			,r.DESCRIPTION ROUTE_DESCR
+			,r.SEQUENCE
+			,r.CURRENT_INDICATOR_LF
+			,rtc.DESCRIPTION TYPE_CL_DESCR
+			,r.LINE_ID
+			,l.DESCRIPTION LINE_DESCR
+			,s.SERIES_ID
+			,s.STATION_BEGIN
+			,s.STATION_END
+			,s.ASCENDING
+			FROM PODS.ROUTE r
+			JOIN PODS.LINE l ON l.LINE_ID = r.LINE_ID
+			JOIN PODS.SERIES s ON s.ROUTE_ID=r.ROUTE_ID AND r.ROUTE_ID!=0
+			JOIN PODS.ROUTE_TYPE_CL rtc ON rtc.CODE=r.TYPE_CL) d
+			WHERE {FILTER}
+			ORDER BY TYPE_CL_DESCR,ROUTE_DESCR,STATION_BEGIN,STATION_END,ID
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+<!-- Список отфильтрованных ROUTE -->
+  <data id="PODS_ROUTE_CNT" comment="Запросы для работы CNT">
+    <select>
+      <dbQuery idField="ID">
+       <var name="FILTER" default="1=1" />
+        <query>
+          SELECT * FROM PODS.ROUTE WHERE 1=2
+        </query>
+      </dbQuery>
+   </select>
+  </data>
+  <!-- Запрос для ComboBox формы выбора параметров для задачи "Группировка пересекающихся объектов" -->
+  <data id="PODS_FEATURE_TABLE" comment="PODS.FEATURE_TABLE" schema="PODS" table="FEATURE_TABLE">
+    <select>
+      <dbQuery idField="ID">
+        <query>SELECT FEATURE_ID AS CODE, TABLE_NAME AS DESCR FROM PODS.FEATURE_TABLE ORDER BY DESCR</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Запрос для ComboBox формы выбора параметров для задачи "Привязка вдольтрассовых объектов" -->
+  <data id="PODS_OFFLINE_EVENT_TYPE_CL" comment="PODS.OFFLINE_EVENT_TYPE_CL" schema="PODS" table="OFFLINE_EVENT_TYPE_CL">
+    <select>
+      <dbQuery idField="ID">
+        <query>SELECT CODE, DESCRIPTION AS DESCR FROM PODS.OFFLINE_EVENT_TYPE_CL ORDER BY DESCR</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список отфильтрованных PIPE_SYSTEM_CL (Задача администрирования коридоров) -->
+  <data id="PODS_PIPE_SYSTEM_CL" comment="PODS.PIPE_SYSTEM_CL" schema="PODS" table="PIPE_SYSTEM_CL">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>
+			SELECT * FROM ( SELECT PIPE_SYSTEM_ID ID
+			,PIPE_SYSTEM_ID
+			,DESCRIPTION
+			FROM PODS.PIPE_SYSTEM_CL
+			WHERE PIPE_SYSTEM_ID != 0
+			) d
+			WHERE {FILTER}
+			ORDER BY DESCRIPTION
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+<!-- Список отфильтрованных PIPE_SYSTEM_CL (Задача администрирования коридоров) -->
+<data id="PODS_PIPE_SYSTEM_CL_CNT" comment="Запросы для работы CNT">
+    <select>
+      <dbQuery idField="ID">
+       <var name="FILTER" default="1=1" />
+        <query>
+          SELECT * FROM PODS.PIPE_SYSTEM_CL WHERE 1=2
+        </query>
+      </dbQuery>
+   </select>
+  </data>
+  <!-- Список отфильтрованных inspections для выбранного ROUTE (задача администрирования ХОДО)-->
+  <data id="WEB50_TEMPLATE_FOR_PIPE_SYSTEM_CL" comment="WEB50.PS_INDEX_OBJ_TEMPLATE" schema="WEB50" table="PS_INDEX_OBJ_TEMPLATE">
+    <select>
+      <dbQuery idField="ID">
+        <query>
+			SELECT TEMPLATE_ID, DESCRIPTION, SCHEMA SCH, OBJECT_NAME, WHERE_CLAUSE, GID_FIELD, BUFFER_WIDTH
+			FROM WEB50.PS_INDEX_OBJ_TEMPLATE
+			ORDER BY DESCRIPTION DESC
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список ЛПУ без ЛПУ с SRV_DISTRICT_ID=1, нужно для создания ролей по ЛПУ (задача администрирования ролей) -->
+  <data id="ADM_ROLES_SRV_DISTRICT" comment="WEB50.B_ROLE" schema="WEB50" table="B_ROLE">
+    <select>
+      <dbQuery idField="ID">
+        <query>SELECT SRV_DISTRICT_ID CODE, DESCRIPTION DESCR FROM PODS.SRV_DISTRICT_GCL WHERE SRV_DISTRICT_ID>0 ORDER BY CODE</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Создание роли для ЛПУ (задача администрирования ролей) -->
+  <data id="CREATE_ROLE_BY_LPU" comment="Запросы для работы с таблицей WEB50.B_ROLE">
+    <insert>
+      <dbCommand>
+        <param name="ID" type="Int64" direction="Output" />
+        <param name="SRV_DISTRICT_ID" type="Int64" direction="Input" />
+		<param name="DESCRIPTION" type="String" direction="Input" />
+		<param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <query>
+            DECLARE
+              C_BASE_ROLE CONSTANT PLS_INTEGER DEFAULT 1; 
+              VAR_ROLE_ID NUMBER;
+              VAR_POLICY_ID NUMBER;
+              VAR_RULE_ID NUMBER;
+            BEGIN
+                /*Каждому ЛПУ по роли*/
+                INSERT INTO WEB50.B_ROLE (DESCRIPTION,CTIME,CUSER_ID)
+                       VALUES ('ЛПУ МГ '||:DESCRIPTION,sysdate,:USER_ID) RETURNING ROLE_ID INTO VAR_ROLE_ID;
+
+                /*Каждому ЛПУ по политике*/
+                INSERT INTO WEB50.B_POLICY (DESCRIPTION,CTIME,CUSER_ID)
+                       VALUES ('ЛПУ МГ '||:DESCRIPTION,sysdate,:USER_ID) RETURNING POLICY_ID INTO VAR_POLICY_ID;
+
+                /*Каждому ЛПУ по правилу*/
+                INSERT INTO WEB50.B_POLICY_RULES (POLICY_ID,CLASS_ID,SELECT_PERMITTED,INSERT_PERMITTED,UPDATE_PERMITTED,DELETE_PERMITTED,CTIME,CUSER_ID)
+                       VALUES (VAR_POLICY_ID,'PODS_SRV_DISTRICT_GCL',1,0,0,0,sysdate,:USER_ID) RETURNING RULE_ID INTO VAR_RULE_ID;
+
+                /*Каждому ЛПУ по фильтру*/
+                INSERT INTO WEB50.B_POLICY_RULE_FILTERS (RULE_ID,PROPERTY_ID,OPERATOR,VALUE,CTIME,CUSER_ID)
+                       VALUES(VAR_RULE_ID,'SRV_DISTRICT_ID','=',:SRV_DISTRICT_ID,sysdate,:USER_ID);
+
+                /*Свяжу роль и политику*/
+                INSERT INTO WEB50.B_ROLE_TO_B_POLICY (ROLE_ID,POLICY_ID,CTIME,CUSER_ID)
+                       VALUES (VAR_ROLE_ID,VAR_POLICY_ID,sysdate,:USER_ID);
+
+                /* Свяжу новую роль и политики с базовой роли (исключая доступ по ЛПУ, если он там откуда-то взялся) */
+                INSERT INTO WEB50.B_ROLE_TO_B_POLICY (ROLE_ID,POLICY_ID,CTIME,CUSER_ID)
+                       SELECT VAR_ROLE_ID,policy_id,sysdate,:USER_ID 
+                         FROM web50.b_role_to_b_policy r2p
+                       WHERE role_id = C_BASE_ROLE
+                         AND NOT EXISTS (SELECT 1 
+                                           FROM web50.b_policy_rules pr
+                                          WHERE pr.policy_id = r2p.policy_id   
+                                            AND pr.class_id = 'PODS_SRV_DISTRICT_GCL'); 
+
+                :ID := VAR_ROLE_ID;
+                
+            END;
+
+	    	</query>
+      </dbCommand>
+    </insert>
+  </data>
+  <!-- Список отфильтрованных ILI_INSPECTION (задача администрирования отчетов ВТД) -->
+  <data id="PODS_ILI_INSPECTION" comment="PODS.ILI_INSPECTION" schema="PODS" table="ILI_INSPECTION">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>
+			SELECT * FROM (
+			SELECT ir.ILI_INSPECTION_ID ID
+			,r.LINE_ID
+			,r.TYPE_CL
+			,rtc.DESCRIPTION TYPE_CL_DESCR
+			,ir.ILI_INSPECTION_ID НОМЕР_ОТЧЕТА
+			,CASE WHEN ir.event_id &lt; 0
+          		 THEN 'НЕ ПРИВЯЗАН'
+           		 ELSE 'ПРИВЯЗАН'
+         		 END ПРИВЯЗКА_ОТЧЕТА
+      		        ,CASE WHEN ir.event_id &gt; 0
+           		THEN r.DESCRIPTION
+          		ELSE NULL
+			END ROUTE_DESCRIPTION
+			,IR.DESCRIPTION ILI_RANGE_DESCRIPTION
+			,TV.DESCRIPTION || ' ('||TO_CHAR(II.BEGIN_DATE,'YYYY')||')'  VENDOR
+			,S.STATION_BEGIN SERIES_STATION_BEGIN
+			,S.STATION_END SERIES_STATION_END
+			,IR.COMMENTS
+			,ir.COMMENTS REPORT_KM_START
+			,ir.COMMENTS REPORT_KM_END
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			JOIN PODS.ILI_ANOMALY_TYPE_CL t
+			ON def.ANOMALY_TYPE_CL = t.CODE
+			WHERE t.CATEGORY_CL = 1
+			AND def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID
+			AND def.COORDINATE_ID IS NOT NULL) ДЕФЕКТОВ_РАССЧИТАННО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			JOIN PODS.ILI_ANOMALY_TYPE_CL t
+			ON def.ANOMALY_TYPE_CL = t.CODE
+			WHERE t.CATEGORY_CL = 1
+			AND def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID
+			AND def.COORDINATE_ID IS NULL) ДЕФЕКТОВ_НЕ_РАССЧИТАННО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			JOIN PODS.ILI_ANOMALY_TYPE_CL t
+			ON def.ANOMALY_TYPE_CL = t.CODE
+			WHERE t.CATEGORY_CL = 1
+			AND DEF.BPR_PIG IS NOT NULL
+			AND def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID) ДЕФЕКТОВ_С_КБД
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			JOIN PODS.ILI_ANOMALY_TYPE_CL t
+			ON def.ANOMALY_TYPE_CL = t.CODE
+			WHERE t.CATEGORY_CL = 1
+			AND def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID) ДЕФЕКТОВ_ВСЕГО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			JOIN PODS.ILI_ANOMALY_TYPE_CL t
+			ON def.ANOMALY_TYPE_CL = t.CODE
+			WHERE t.CATEGORY_CL = 5
+			AND def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID
+			AND def.COORDINATE_ID IS NOT NULL) ШВОВ_РАССЧИТАННО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			JOIN PODS.ILI_ANOMALY_TYPE_CL t
+			ON def.ANOMALY_TYPE_CL = t.CODE
+			WHERE t.CATEGORY_CL = 5
+			AND def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID
+			AND def.COORDINATE_ID IS NULL) ШВОВ_НЕ_РАССЧИТАННО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			JOIN PODS.ILI_ANOMALY_TYPE_CL t
+			ON def.ANOMALY_TYPE_CL = t.CODE
+			WHERE t.CATEGORY_CL = 5
+			AND def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID) ШВОВ_ВСЕГО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			WHERE def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID
+			AND def.COORDINATE_ID IS NOT NULL) ВСЕХ_ДАННЫХ_РАССЧИТАННО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			WHERE def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID
+			AND def.COORDINATE_ID IS NULL) ВСЕХ_ДАННЫХ_НЕ_РАССЧИТАННО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			WHERE def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID) ВСЕХ_ДАННЫХ_ВСЕГО
+			,(SELECT COUNT(*)
+			FROM PODS.ILI_DATA def
+			WHERE def.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID
+			AND def.ANOMALY_TYPE_CL = 0 ) ДАННЫХ_НЕ_КЛАССИФИЦИРОВАНО
+			,CASE (SELECT MIN(comments)
+			FROM pods.comments c
+			WHERE table_id = 'ILI_INSPECTION'
+			AND comment_by = 'IS_DIRTY'
+			AND c.id = ir.ILI_INSPECTION_ID::text)
+			WHEN '0' THEN 'Не готов'
+			WHEN '1' THEN 'Готов'
+			ELSE 'Рассчитан'
+			END РАССЧИТАН
+			FROM PODS.ILI_INSPECTION_RANGE ir
+			JOIN PODS.EVENT_RANGE er
+			ON ir.EVENT_ID = er.EVENT_ID
+			JOIN PODS.STATION_POINT sp
+			ON er.STATION_ID_BEGIN = sp.STATION_ID
+			JOIN PODS.LINE l
+			ON sp.LINE_ID = l.LINE_ID
+			JOIN PODS.ROUTE r
+			ON sp.ROUTE_ID = r.ROUTE_ID
+			JOIN PODS.SERIES s
+			ON s.ROUTE_ID = r.ROUTE_ID
+			JOIN PODS.ILI_INSPECTION ii
+			ON ii.ILI_INSPECTION_ID = ir.ILI_INSPECTION_ID
+			JOIN PODS.ILI_TOOL_VENDOR_CL tv
+			ON II.TOOL_VENDOR_CL = TV.CODE
+			JOIN PODS.ROUTE_TYPE_CL rtc 
+			ON rtc.CODE=r.TYPE_CL
+			) d
+			WHERE {FILTER}
+			ORDER BY 4, 7, 10, 11, 9, 2 DESC, 5, 7
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+<!-- Список отфильтрованных ILI_INSPECTION (задача администрирования отчетов ВТД) -->
+  <data id="PODS_ILI_INSPECTION_CNT" comment="Запросы для работы CNT">
+    <select>
+      <dbQuery idField="ID">
+       <var name="FILTER" default="1=1" />
+        <query>
+          SELECT * FROM PODS.ILI_INSPECTION WHERE 1=2
+        </query>
+      </dbQuery>
+   </select>
+  </data>
+  <!-- Скрипт привязки отчета к трубе по ILI_INSPECTION_ID и ROUTE_ID (задача администрирования отчетов ВТД) -->
+  <data id="BIND_ILI_INSPECTION_TO_ROUTE" comment="PODS.ILI_INSPECTION" schema="PODS" table="ILI_INSPECTION">
+    <update>
+      <dbCommand>
+        <param name="ROUTE_ID" type="Int64" direction="Input" />
+        <param name="ILI_INSPECTION_ID" type="Int64" direction="Input" />
+        <query>
+DECLARE
+   v_station_begin   NUMBER;
+   v_station_end     NUMBER;
+   v_r_event_id      NUMBER;
+   v_km_start        NUMBER;
+   v_km_end          NUMBER;
+   v_route_descr     VARCHAR2 (2000);
+   v_route_id        NUMBER;
+BEGIN
+   BEGIN
+      SELECT event_id
+        INTO v_r_event_id
+        FROM pods.ili_inspection_range
+       WHERE ili_inspection_id = :ILI_INSPECTION_ID;
+   EXCEPTION
+      WHEN NO_DATA_FOUND
+      THEN
+         RAISE_APPLICATION_ERROR (-20701,'Не найдено записи ili_inspection_range для указанного отчета!');
+   END;
+
+   IF v_r_event_id != -50
+   THEN
+        UPDATE PODS.EVENT_RANGE
+        SET CURRENT_INDICATOR_LF='N'
+        WHERE EVENT_ID IN (SELECT EVENT_ID FROM PODS.ILI_DATA WHERE ILI_INSPECTION_ID = :ILI_INSPECTION_ID);
+
+        UPDATE PODS.EVENT_RANGE
+        SET CURRENT_INDICATOR_LF='N'
+        WHERE EVENT_ID IN (SELECT EVENT_ID FROM PODS.ILI_PIPE_LENGTH WHERE ILI_INSPECTION_ID = :ILI_INSPECTION_ID);
+
+        UPDATE PODS.EVENT_RANGE
+        SET CURRENT_INDICATOR_LF='N'
+        WHERE EVENT_ID IN (SELECT EVENT_ID FROM PODS.ILI_INSPECTION_RANGE WHERE ILI_INSPECTION_ID = :ILI_INSPECTION_ID);
+
+        UPDATE pods.ili_inspection_range ir
+           SET event_id = -50
+          WHERE ir.ili_inspection_id = :ILI_INSPECTION_ID;
+          
+        /* Сброс ILI_CLUSTER */
+        UPDATE pods.ili_cluster ir
+           SET event_id = -110
+          WHERE ir.ili_inspection_id = :ILI_INSPECTION_ID;
+          
+        /* Сброс ILI_DATE */
+        UPDATE pods.ili_data
+           SET event_id = NULL
+              ,coordinate_id = NULL
+              ,certainty_interval = NULL
+              ,control_point_lf = NULL
+              ,ref_event_id = NULL
+              ,ref_event_guid = NULL
+              ,calibrated_measure = NULL
+         WHERE ili_inspection_id = :ILI_INSPECTION_ID;
+         
+        /* Сброс ILI_PIPE_LENGTH */
+        UPDATE pods.ili_pipe_length
+           SET event_id = NULL
+              ,start_coordinate_id = NULL
+              ,start_coordinate_guid = NULL
+              ,end_coordinate_id = NULL
+              ,end_coordinate_guid = NULL
+        WHERE ili_inspection_id = :ILI_INSPECTION_ID;
+                   
+
+   ELSE
+      v_r_event_id := NULL;
+   END IF;
+
+   BEGIN
+        SELECT MIN (sp1.station_id), MAX (sp2.station_id)
+          INTO v_station_begin, v_station_end
+          FROM pods.route r
+               JOIN pods.station_point sp1
+                 ON sp1.route_id = r.route_id
+               JOIN pods.station_point sp2
+                 ON sp2.route_id = r.route_id
+         WHERE r.route_id = :ROUTE_ID
+           AND NOT EXISTS (SELECT 1
+                             FROM pods.station_point sp
+                            WHERE sp.route_id = :ROUTE_ID
+                              AND sp.measure &lt; sp1.measure)
+               AND NOT EXISTS
+                          (SELECT 1
+                             FROM pods.station_point sp
+                            WHERE sp.route_id = :ROUTE_ID
+                              AND sp.measure &gt; sp2.measure)
+      GROUP BY r.route_id;
+      
+   EXCEPTION
+      WHEN NO_DATA_FOUND
+      THEN
+         RAISE_APPLICATION_ERROR (-20703,'Не найдено информации по указаному участку!');
+   END;
+
+   INSERT INTO pods.event_range (FEATURE_ID,station_id_begin,station_id_end,pods_user,create_date,effective_from_date,current_indicator_lf)
+          VALUES ('ILI_INSP_RNG',v_station_begin,v_station_end,'ADMIN',TRUNC (SYSDATE),TRUNC (SYSDATE),'Y')
+          RETURNING event_id
+          INTO v_r_event_id;
+
+   UPDATE pods.ili_inspection_range
+      SET event_id = v_r_event_id
+    WHERE ili_inspection_id = :ILI_INSPECTION_ID;
+END;
+		</query>
+      </dbCommand>
+    </update>
+  </data>
+  <!-- Список отфильтрованных PI_CP_INSPECTION (задача администрирования наружных обследований) -->
+  <data id="PODS_PI_CP_INSPECTION" comment="PODS.PI_CP_INSPECTION" schema="PODS" table="PI_CP_INSPECTION">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>
+			SELECT * FROM ( SELECT i.EVENT_ID ID
+			,ln.LINE_ID
+			,i.EVENT_ID
+			,i.DESCRIPTION
+			,ln.TYPE_CL
+			,ltc.DESCRIPTION TYPE_CL_DESCR
+			,TO_CHAR(inspection_date,'DD.MM.YYYY') REPORT_DATE
+			,CASE spb.line_id WHEN 0 THEN 'Не привязан' ELSE 'Привязан' END LINE_DESCR
+			,NULLIF(spb.station,0) KM_START
+			,NULLIF(spe.station,0) KM_END
+			,(SELECT COUNT(*) FROM pods.pi_anode_reading d WHERE d.pi_cp_event_id = i.event_id) PI_ANODE_READING_CNT
+			,(SELECT COUNT(*) FROM pods.pi_bond_reading d WHERE d.pi_cp_event_id = i.event_id) PI_BOND_READING_CNT
+			,(SELECT COUNT(*) FROM pods.pi_casing_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CASING_READING_CNT
+			,(SELECT COUNT(*) FROM pods.pi_cis_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CIS_READING_CNT
+			,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CP_READING_CNT
+			,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id AND replace(regexp_substr(d.comments,';.*;'),';') is not null ) PI_CP_READING_LNK_CNT
+			,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id AND EXISTS (SELECT 1 FROM pods.event_range ier WHERE ier.event_id = d.event_id AND station_id_begin != 0) ) PI_CP_READING_CALC_CNT
+			,(SELECT COUNT(*) FROM pods.pi_ground_bed_reading d WHERE d.pi_cp_event_id = i.event_id) PI_GROUND_BED_READING_CNT
+			,(SELECT COUNT(*) FROM pods.pi_rectifier_reading d WHERE d.pi_cp_event_id = i.event_id) PI_RECTIFIER_READING_CNT
+			FROM pods.pi_cp_inspection i
+			JOIN pods.event_range er ON er.event_id = i.event_id
+			JOIN pods.station_point spb ON spb.station_id = er.station_id_begin
+			JOIN pods.station_point spe ON spe.station_id = er.station_id_end
+			JOIN pods.line ln ON ln.line_id = spb.line_id
+			JOIN pods.line_type_cl ltc ON ltc.CODE = ln.TYPE_CL
+			WHERE i.event_id &gt; 0 ) d
+			WHERE {FILTER}
+			ORDER BY 6,4,9,10,7,2
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+<!-- Список отфильтрованных PI_CP_INSPECTION (задача администрирования наружных обследований) -->
+<data id="PODS_PI_CP_INSPECTION_CNT" comment="Запросы для работы CNT">
+    <select>
+      <dbQuery idField="ID">
+       <var name="FILTER" default="1=1" />
+        <query>
+          SELECT * FROM PODS.PI_CP_INSPECTION WHERE 1=2
+        </query>
+      </dbQuery>
+   </select>
+  </data>
+  <!-- Скрипт привязки отчета к трубе по PI_CP_INSPECTION_ID, LINE_DESCR, KM_START, KM_END (задача администрирования отчетов ЭХЗ) -->
+  <!-- Скрипт НЕ ДОДЕЛАН ! В нем не выполняется привязка по event_range !!! -->
+  <data id="BIND_PI_CP_INSPECTION_TO_LINE" comment="PODS.PI_CP_INSPECTION" schema="PODS" table="PI_CP_INSPECTION">
+    <update>
+      <dbCommand>
+        <param name="PI_CP_INSPECTION_ID" type="String" direction="Input" />
+		<param name="LINE_DESCR" type="String" direction="Input" />
+		<param name="KM_START" type="String" direction="Input" />
+		<param name="KM_END" type="String" direction="Input" />
+        <query>
+			/* Связывание отчетов - привязка к кипам */
+			DECLARE
+			c_max_delta CONSTANT NUMBER DEFAULT 0.1;
+			v_start_id   NUMBER;
+			v_end_id     NUMBER;
+			v_start_x    NUMBER;
+			v_start_y    NUMBER;
+			v_end_x      NUMBER;
+			v_end_y      NUMBER;
+
+			BEGIN
+
+			UPDATE pods.pi_cp_inspection
+			SET  description = :LINE_DESCR , comments = :KM_START||'-'||:KM_END
+			WHERE event_id= :PI_CP_INSPECTION_ID  ;
+
+			BEGIN
+			FOR i IN (SELECT event_id
+			,description
+			,comments
+			,regexp_replace(comments,'-.*') km_start
+			,regexp_replace(comments,'.*-') km_end
+			FROM pods.pi_cp_inspection i
+			WHERE    i. event_id=:PI_CP_INSPECTION_ID)
+			LOOP
+			BEGIN
+			WITH kips AS (SELECT kip.event_id,kip_sp.station kip_km,c.x_coord x,c.y_coord y
+			FROM pods.event_range kip
+			JOIN pods.station_point kip_sp
+			ON kip.station_id_begin = kip_sp.station_id
+			JOIN pods.line l
+			ON kip_sp.line_id = l.line_id
+			JOIN pods.coordinate c
+			ON c.location_id = kip_sp.location_Id
+			WHERE kip.feature_id = 'TEST_LEAD'
+			AND (TRIM(UPPER(REGEXP_REPLACE(REPLACE(REPLACE(REPLACE(l.description,'III','3'),'II','2'),'I','1'),'\s|-|\(|\)','')))
+			LIKE TRIM(UPPER(REGEXP_REPLACE(REPLACE(REPLACE(REPLACE(i.description,'III','3'),'II','2'),'I','1'),'\s|-|\(|\)','')))
+			OR strpos(TRIM(UPPER(REGEXP_REPLACE(REPLACE(REPLACE(REPLACE(i.description,'III','3'),'II','2'),'I','1'),'\s|-|\(|\)','')))
+			,TRIM(UPPER(REGEXP_REPLACE(REPLACE(REPLACE(REPLACE(l.description,'III','3'),'II','2'),'I','1'),'\s|-|\(|\)','')))) > 0)
+			),
+			deltas AS (SELECT r.pi_cp_reading_id
+			,TO_NUMBER(coalesce(substr(comments, 1, strpos(comments, ';')-1),'0')) km
+			,kips.kip_km
+			,ABS(TO_NUMBER(TO_NUMBER(coalesce(substr(comments, 1, strpos(comments, ';')-1),'0'))) - kips.kip_km) delta
+			,x
+			,y
+			FROM pods.pi_cp_reading r
+			CROSS JOIN kips
+			WHERE pi_cp_event_id = i.event_id)
+			SELECT DISTINCT FIRST_VALUE(pi_cp_reading_id) OVER (ORDER BY kip_km ASC) start_id
+			,FIRST_VALUE(pi_cp_reading_id) OVER (ORDER BY kip_km DESC) end_id
+			,FIRST_VALUE(x) OVER (ORDER BY kip_km ASC) start_X
+			,FIRST_VALUE(y) OVER (ORDER BY kip_km ASC) start_Y
+			,FIRST_VALUE(x) OVER (ORDER BY kip_km DESC) end_X
+			,FIRST_VALUE(y) OVER (ORDER BY kip_km DESC) end_Y
+			INTO v_start_id
+			,v_end_id
+			,v_start_x
+			,v_start_y
+			,v_end_x
+			,v_end_y
+			FROM deltas d
+			WHERE delta &lt;= c_max_delta;
+
+			UPDATE pods.pi_cp_reading
+			SET comments = substr(comments, 1, strpos(comments, ';')-1)||';'||v_start_y||';'||v_start_x
+			WHERE pi_cp_reading_id = v_start_id;
+
+			UPDATE pods.pi_cp_reading
+			SET comments = substr(comments, 1, strpos(comments, ';')-1)||';'||v_end_y||';'||v_end_x
+			WHERE pi_cp_reading_id = v_end_id;
+
+			UPDATE pods.comments
+			SET comments = '1'
+			WHERE table_id = 'PI_CP_INSPECTION'
+			AND comment_by = 'IS_DIRTY'
+			AND id = TO_CHAR(i.event_id)
+			AND comments = '0'
+			AND current_indicator_lf = 'Y';
+
+			dbms_output.put_line('Отчета с event_id: '||to_char(i.event_id)||' привязан по КИП-ам!');
+
+			EXCEPTION WHEN NO_DATA_FOUND THEN
+			dbms_output.put_line('Для отчета с event_id: '||to_char(i.event_id)||' не нашли подходящих КИП-ов!');
+			END;
+			END LOOP;
+			END;
+
+			/* Признак необходимости рассчитать коридор */
+			MERGE INTO pods.comments d
+			USING (SELECT 'PIPE_SYSTEM_CL' table_id,'IS_DIRTY' comment_by,psb.pipe_system_id id,'1' comments, 'INFOTEH' source_gcl,'Y' current_indicator_lf
+			FROM pods.pipe_system_boundary psb
+			WHERE EXISTS (SELECT 1
+			FROM pods.series s
+			JOIN pods.station_point sp
+			ON sp.series_id = s.series_id
+			WHERE psb.line_id = s.line_id
+			AND psb.km_end >=s.station_begin
+			AND psb.km_begin &lt;=s.station_end
+			AND EXISTS (SELECT 1
+			FROM pods.event_range er
+			JOIN pods.comments c1
+			ON c1.id = TO_CHAR(er.event_id)
+			WHERE er.feature_id = 'PI_CP_INSPECTION'
+			AND c1.table_id = 'PI_CP_INSPECTION'
+			AND c1.comment_by = 'IS_DIRTY'
+			AND c1.comments = '1' AND er.event_id=:PI_CP_INSPECTION_ID ))) s
+			ON (s.table_id = d.table_id
+			AND s.comment_by = d.comment_by
+			AND s.id = d.id )
+			WHEN MATCHED THEN UPDATE SET d.comments = s.comments
+			WHEN NOT MATCHED THEN INSERT (table_id,comment_by,id,comments,source_gcl,current_indicator_lf)
+			VALUES (s.table_id,s.comment_by,s.id,s.comments,s.source_gcl,s.current_indicator_lf);
+
+			END;
+		</query>
+      </dbCommand>
+    </update>
+  </data>
+  <!-- Список ГТП (для фильтра SRV_DISTRICT_GCL по ГТП - задача администрирования ЛПУ) -->
+  <data id="PODS_COMPANY_GCL" comment="PODS.COMPANY_GCL" schema="WEB50" table="COMPANY_GCL">
+    <select>
+      <dbQuery idField="ID">
+        <query>SELECT CODE, NAME DESCR FROM PODS.COMPANY_GCL a WHERE EXISTS (SELECT 'x' FROM PODS.SRV_DISTRICT_GCL b WHERE a.CODE=b.COMPANY_GCL)</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список отфильтрованных ЛПУ (задача администрирования ЛПУ) -->
+  <data id="PODS_SRV_DISTRICT_GCL" comment="PODS.SRV_DISTRICT_GCL" schema="PODS" table="SRV_DISTRICT_GCL">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>
+			SELECT * FROM (SELECT sdg.SRV_DISTRICT_ID ID
+			,sdg.SRV_DISTRICT_ID
+			,sdg.COMPANY_GCL
+			,sdg.DESCRIPTION DESCR
+			,cg.NAME GTP_DESCR
+			FROM PODS.SRV_DISTRICT_GCL sdg
+			JOIN PODS.COMPANY_GCL cg ON cg.CODE=sdg.COMPANY_GCL) d
+			WHERE {FILTER}
+			ORDER BY GTP_DESCR,DESCR
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+<!-- Список отфильтрованных ЛПУ (задача администрирования ЛПУ) -->
+<data id="PODS_SRV_DISTRICT_GCL_CNT" comment="Запросы для работы CNT">
+    <select>
+      <dbQuery idField="ID">
+       <var name="FILTER" default="1=1" />
+        <query>
+          SELECT * FROM PODS.SRV_DISTRICT_GCL WHERE 1=2
+        </query>
+      </dbQuery>
+   </select>
+  </data>
+  <!-- Список связей ЛПУ с зонами (задача администрирования ЛПУ) -->
+  <data id="WEB50_LPU_TO_M_ZONES" comment="WEB50.M_ZONES" schema="WEB50" table="M_ZONES">
+    <select>
+      <dbQuery idField="ID">
+        <param name="ZONE_NAME" type="String" direction="Input" />
+        <param name="ZONE_ID" type="Int64" direction="Input" />
+        <query>
+			SELECT * FROM (
+			SELECT 'M5' ZONE_NAME, M5_ZSD.SRV_DISTRICT_ID, SDG5.DESCRIPTION DESCR,
+			M5_Z.ZONE_ID CODE, 'WEB50.M_5_ZONE_TO_SRV_DISTRICT' ZONELPU_TABLE_SAVE
+			FROM WEB50.M_5_ZONE M5_Z
+			JOIN WEB50.M_5_ZONE_TO_SRV_DISTRICT M5_ZSD ON M5_ZSD.ZONE_ID=M5_Z.ZONE_ID
+			JOIN PODS.SRV_DISTRICT_GCL SDG5
+			ON M5_ZSD.SRV_DISTRICT_ID = SDG5.SRV_DISTRICT_ID
+			UNION ALL
+			SELECT 'M10' ZONE_NAME, M10_ZSD.SRV_DISTRICT_ID, SDG10.DESCRIPTION DESCR,
+			M10_Z.ZONE_ID CODE, 'WEB50.M_10_ZONE_TO_SRV_DISTRICT' ZONELPU_TABLE_SAVE
+			FROM WEB50.M_10_ZONE M10_Z
+			JOIN WEB50.M_10_ZONE_TO_SRV_DISTRICT M10_ZSD ON M10_ZSD.ZONE_ID=M10_Z.ZONE_ID
+			JOIN PODS.SRV_DISTRICT_GCL SDG10
+			ON M10_ZSD.SRV_DISTRICT_ID = SDG10.SRV_DISTRICT_ID
+			UNION ALL
+			SELECT 'M25' ZONE_NAME, M25_ZSD.SRV_DISTRICT_ID, SDG25.DESCRIPTION DESCR,
+			M25_Z.ZONE_ID CODE, 'WEB50.M_25_ZONE_TO_SRV_DISTRICT' ZONELPU_TABLE_SAVE
+			FROM WEB50.M_25_ZONE M25_Z
+			JOIN WEB50.M_25_ZONE_TO_SRV_DISTRICT M25_ZSD ON M25_ZSD.ZONE_ID=M25_Z.ZONE_ID
+			JOIN PODS.SRV_DISTRICT_GCL SDG25
+			ON M25_ZSD.SRV_DISTRICT_ID = SDG25.SRV_DISTRICT_ID
+			UNION ALL
+			SELECT 'M1' ZONE_NAME, M1_ZSD.SRV_DISTRICT_ID, SDG10.DESCRIPTION DESCR,
+			M1_Z.ZONE_ID CODE,'WEB50.M_1_ZONE_TO_SRV_DISTRICT' ZONELPU_TABLE_SAVE
+			FROM WEB50.M_1_ZONE M1_Z
+			JOIN WEB50.M_1_ZONE_TO_SRV_DISTRICT M1_ZSD ON M1_ZSD.ZONE_ID=M1_Z.ZONE_ID
+			JOIN PODS.SRV_DISTRICT_GCL SDG10
+			ON M1_ZSD.SRV_DISTRICT_ID = SDG10.SRV_DISTRICT_ID ) d
+			WHERE d.ZONE_NAME=:ZONE_NAME
+			ORDER BY CODE
+		</query>
+      </dbQuery>
+    </select>
+    <insert>
+      <dbCommand>
+        <param name="ID" type="Int64" direction="Output" />
+        <param name="SRV_DISTRICT_ID" type="Int64" direction="Input" />
+        <param name="ZONE_ID" type="Int64" direction="Input" />
+        <param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <var name="ZONELPU_TABLE_SAVE" />
+        <query>
+			BEGIN
+			INSERT INTO {ZONELPU_TABLE_SAVE} (SRV_DISTRICT_ID,ZONE_ID,CTIME,CUSER_ID) VALUES (:SRV_DISTRICT_ID,:ZONE_ID,sysdate,:USER_ID);
+			END;
+		</query>
+      </dbCommand>
+    </insert>
+    <delete>
+      <dbCommand>
+        <param name="SRV_DISTRICT_ID" type="Int64" direction="Input" />
+        <param name="ZONE_ID" type="Int64" direction="Input" />
+        <param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <var name="ZONELPU_TABLE_SAVE" />
+        <query>
+			BEGIN
+			DELETE FROM {ZONELPU_TABLE_SAVE}
+			WHERE SRV_DISTRICT_ID=:SRV_DISTRICT_ID AND ZONE_ID=:ZONE_ID;
+			END;
+		</query>
+      </dbCommand>
+    </delete>
+  </data>
+  <!-- Список зон первого уровня (задача администрирования ЛПУ) -->
+  <data id="WEB50_M_ZONE_GROUPS" comment="WEB50.M_ZONES" schema="WEB50" table="M_ZONES">
+    <select>
+      <dbQuery idField="ID">
+        <query>
+			SELECT '1:5000' DESCR, 'M5' CODE FROM DUAL
+			UNION ALL
+			SELECT '1:10000' DESCR, 'M10' CODE FROM DUAL
+			UNION ALL
+			SELECT '1:25000' DESCR, 'M25' CODE FROM DUAl
+			UNION ALL
+			SELECT '1:1000' DESCR, 'M1' CODE FROM DUAL
+			ORDER BY CODE
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список зон второго уровня (задача администрирования ЛПУ) -->
+  <data id="WEB50_M_ZONE_RES" comment="WEB50.M_ZONES" schema="WEB50" table="M_ZONES">
+    <select>
+      <dbQuery idField="ID">
+        <param name="ZONE_NAME" type="String" direction="Input" />
+        <query>
+			SELECT * FROM (
+			SELECT ZONE_ID DESCR, ZONE_ID CODE, 'M5' ZONE_NAME, 'WEB50.M_5_ZONE_TO_SRV_DISTRICT' ZONELPU_TABLE_SAVE
+			FROM WEB50.M_5_ZONE
+			UNION ALL
+			SELECT ZONE_ID DESCR, ZONE_ID CODE, 'M10' ZONE_NAME, 'WEB50.M_10_ZONE_TO_SRV_DISTRICT' ZONELPU_TABLE_SAVE
+			FROM WEB50.M_10_ZONE
+			UNION ALL
+			SELECT ZONE_ID DESCR, ZONE_ID CODE, 'M25' ZONE_NAME, 'WEB50.M_25_ZONE_TO_SRV_DISTRICT' ZONELPU_TABLE_SAVE
+			FROM WEB50.M_25_ZONE
+			UNION ALL
+			SELECT ZONE_ID DESCR, ZONE_ID CODE, 'M1' ZONE_NAME, 'WEB50.M_1_ZONE_TO_SRV_DISTRICT' ZONELPU_TABLE_SAVE
+			FROM WEB50.M_1_ZONE
+			ORDER BY ZONE_NAME,DESCR ) d
+			WHERE d.ZONE_NAME=:ZONE_NAME
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список связей ЛПУ с номенклатурами, добавление новых ЛПУ в номенклатуру, удаление ЛПУ из номенклатуры (задача администрирования ЛПУ) -->
+  <data id="WEB50_LPU_TO_M_NOMENCLATURES" comment="WEB50.M_NOMENCLATURES" schema="WEB50" table="M_NOMENCLATURES">
+    <select>
+      <dbQuery idField="ID">
+        <param name="NOM_NAME" type="String" direction="Input" />
+        <param name="NOM_FIRST_GROUP" type="String" direction="Input" />
+        <param name="NOM_SECOND_GROUP" type="String" direction="Input" />
+        <param name="NOM_RES" type="String" direction="Input" />
+        <param name="SRV_DISTRICT_ID" type="Int64" direction="Input" />
+        <query>
+			SELECT * FROM (
+			SELECT m100_nsd.SRV_DISTRICT_ID, SDG100.DESCRIPTION DESCR,
+			m100_nsd.NOMENCLATURE CODE,
+            regexp_replace(m100_nr.NOMENCLATURE,',.*','') NOM_SECOND_GROUP,
+			'M100' NOM_NAME,
+			substr(m100_nr.NOMENCLATURE,1,1) NOM_FIRST_GROUP,
+			'WEB50.M_100_NOM_TO_SRV_DISTRICT' NOMLPU_TABLE_SAVE
+			FROM WEB50.M_100_NOM_TO_SRV_DISTRICT m100_nsd
+			JOIN PODS.SRV_DISTRICT_GCL sdg100
+			ON m100_nsd.SRV_DISTRICT_ID = sdg100.SRV_DISTRICT_ID
+			JOIN WEB50.M_100_NOMENCLATURE_REF m100_nr
+			ON m100_nr.NOMENCLATURE = m100_nsd.NOMENCLATURE
+			UNION ALL
+			SELECT m200_nsd.SRV_DISTRICT_ID, sdg200.DESCRIPTION DESCR,
+			m200_nsd.NOMENCLATURE CODE,
+            regexp_replace(m200_nr.NOMENCLATURE,',.*','') NOM_SECOND_GROUP,
+			'M200' NOM_NAME,
+			substr(m200_nr.NOMENCLATURE_ROMAN,1,1) NOM_FIRST_GROUP,
+			'WEB50.M_200_NOM_TO_SRV_DISTRICT' NOMLPU_TABLE_SAVE
+			FROM WEB50.M_200_NOM_TO_SRV_DISTRICT m200_nsd
+			JOIN PODS.SRV_DISTRICT_GCL sdg200
+			ON m200_nsd.SRV_DISTRICT_ID = sdg200.SRV_DISTRICT_ID
+			JOIN WEB50.M_200_NOMENCLATURE_REF m200_nr
+			ON m200_nr.NOMENCLATURE = m200_nsd.NOMENCLATURE
+			UNION ALL
+			SELECT m1K_nsd.SRV_DISTRICT_ID, SDG1K.DESCRIPTION DESCR,
+			m1K_nsd.NOMENCLATURE CODE,
+            regexp_replace(m1K_nr.NOMENCLATURE,',.*','') NOM_SECOND_GROUP,
+			'M1K' NOM_NAME,
+			substr(m1K_nr.NOMENCLATURE,1,1) NOM_FIRST_GROUP,
+			'WEB50.M_1K_NOM_TO_SRV_DISTRICT' NOMLPU_TABLE_SAVE
+			FROM WEB50.M_1K_NOM_TO_SRV_DISTRICT m1K_nsd
+			JOIN PODS.SRV_DISTRICT_GCL sdg1K
+			ON m1K_nsd.SRV_DISTRICT_ID = sdg1K.SRV_DISTRICT_ID
+			JOIN WEB50.M_1K_NOMENCLATURE_REF m1K_nr
+			ON m1K_nr.NOMENCLATURE = m1K_nsd.NOMENCLATURE ) d
+			WHERE d.NOM_NAME=:NOM_NAME AND d.NOM_FIRST_GROUP=:NOM_FIRST_GROUP
+			AND (:NOM_NAME='M1K' OR d.NOM_SECOND_GROUP=:NOM_SECOND_GROUP)
+			ORDER BY d.CODE
+		</query>
+      </dbQuery>
+    </select>
+    <insert>
+      <dbCommand>
+        <param name="ID" type="Int64" direction="Output" />
+        <param name="SRV_DISTRICT_ID" type="Int64" direction="Input" />
+        <param name="NOM_RES" type="String" direction="Input" />
+        <param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <var name="NOMLPU_TABLE_SAVE" />
+        <query>
+			BEGIN
+			INSERT INTO {NOMLPU_TABLE_SAVE} (SRV_DISTRICT_ID,NOMENCLATURE,CTIME,CUSER_ID) VALUES (:SRV_DISTRICT_ID,:NOM_RES,sysdate,:USER_ID);
+			END;
+		</query>
+      </dbCommand>
+    </insert>
+    <delete>
+      <dbCommand>
+        <param name="SRV_DISTRICT_ID" type="Int64" direction="Input" />
+        <param name="NOM_RES" type="String" direction="Input" />
+        <param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <var name="NOMLPU_TABLE_SAVE" />
+        <query>
+			BEGIN
+			DELETE FROM {NOMLPU_TABLE_SAVE}
+			WHERE SRV_DISTRICT_ID=:SRV_DISTRICT_ID AND NOMENCLATURE=:NOM_RES;
+			END;
+		</query>
+      </dbCommand>
+    </delete>
+  </data>
+  <!-- Список номенклатур первого уровня (задача администрирования ЛПУ) -->
+  <data id="NOM_GROUPS" comment="WEB50.M_NOMENCLATURES" schema="WEB50" table="M_NOMENCLATURES">
+    <select>
+      <dbQuery idField="ID">
+        <query>
+			SELECT '1:100000' DESCR, 'M100' CODE FROM DUAL
+			UNION ALL
+			SELECT '1:1000000' DESCR, 'M1K' CODE FROM DUAL
+			UNION ALL
+			SELECT '1:200000' DESCR, 'M200' CODE FROM DUAL
+			ORDER BY CODE
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список номенклатур второго уровня (задача администрирования ЛПУ) -->
+  <data id="NOMS_1_GROUP" comment="WEB50.M_NOMENCLATURES" schema="WEB50" table="M_NOMENCLATURES">
+    <select>
+      <dbQuery idField="ID">
+        <param name="NOM_NAME" type="String" direction="Input" />
+        <query>
+			SELECT * FROM (
+			select substr(nomenclature,1,1) DESCR,substr(nomenclature,1,1) CODE,'M100' NOM_NAME from WEB50.M_100_NOMENCLATURE_REF
+			group by substr(nomenclature,1,1)
+			union all
+			select substr(nomenclature,1,1) DESCR, substr(nomenclature,1,1) CODE,'M1K' NOM_NAME from WEB50.M_200_NOMENCLATURE_REF
+			group by substr(nomenclature,1,1)
+			union all
+			select substr(nomenclature,1,1) DESCR, substr(nomenclature,1,1) CODE,'M200' NOM_NAME from WEB50.M_1K_NOMENCLATURE_REF
+			group by substr(nomenclature,1,1)
+			order by DESCR ) d
+			WHERE d.NOM_NAME = :NOM_NAME
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список номенклатур третьего уровня (задача администрирования ЛПУ) -->
+  <data id="NOMS_2_GROUP" comment="WEB50.M_NOMENCLATURES" schema="WEB50" table="M_NOMENCLATURES">
+    <select>
+      <dbQuery idField="ID">
+        <param name="NOM_NAME" type="String" direction="Input" />
+        <param name="NOM_FIRST_GROUP" type="String" direction="Input" />
+        <query>
+			SELECT * FROM (
+            SELECT DISTINCT
+            (regexp_matches(NOMENCLATURE,'^\w+-\d+'))[1] DESCR,
+            (regexp_matches(NOMENCLATURE,'^\w+-\d+'))[1] CODE,
+            'M100'                                       NOM_NAME,
+            substr(nomenclature, 1, 1)                   NOM_FIRST_GROUP
+            FROM WEB50.M_100_NOMENCLATURE_REF
+			union all
+            SELECT DISTINCT
+            (regexp_matches(NOMENCLATURE_ROMAN,'^\w+-\d+'))[1] DESCR,
+            (regexp_matches(NOMENCLATURE_ROMAN,'^\w+-\d+'))[1] CODE,
+            'M100'                                             NOM_NAME,
+            substr(NOMENCLATURE_ROMAN, 1, 1)                   NOM_FIRST_GROUP
+            FROM WEB50.M_200_NOMENCLATURE_REF
+			union all
+            SELECT DISTINCT
+            regexp_replace(NOMENCLATURE,',.*','') DESCR,
+            regexp_replace(NOMENCLATURE,',.*','') CODE,
+            'M1K'                                 NOM_NAME,
+            substr(nomenclature, 1, 1)            NOM_FIRST_GROUP
+            FROM WEB50.M_1K_NOMENCLATURE_REF
+			order by DESCR ) d
+			WHERE d.NOM_NAME=:NOM_NAME AND d.NOM_FIRST_GROUP=:NOM_FIRST_GROUP
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список номенклатур четвертого уровня (задача администрирования ЛПУ) -->
+  <data id="NOMS_3_RES" comment="WEB50.M_NOMENCLATURES" schema="WEB50" table="M_NOMENCLATURES">
+    <select>
+      <dbQuery idField="ID">
+        <param name="NOM_NAME" type="String" direction="Input" />
+        <param name="NOM_FIRST_GROUP" type="String" direction="Input" />
+        <param name="NOM_SECOND_GROUP" type="String" direction="Input" />
+        <query>
+			SELECT * FROM (
+			select nomenclature DESCR
+                  ,nomenclature CODE
+                  ,(regexp_matches(NOMENCLATURE,'^\w+-\d+'))[1] NOM_SECOND_GROUP
+                  ,'M100' NOM_NAME
+                  ,substr(nomenclature,1,1) NOM_FIRST_GROUP
+                  ,'WEB50.M_100_NOM_TO_SRV_DISTRICT' NOMLPU_TABLE_SAVE
+			from WEB50.M_100_NOMENCLATURE_REF
+			union all
+			select nomenclature DESCR, nomenclature CODE, (regexp_matches(NOMENCLATURE_ROMAN,'^\w+-\d+'))[1] NOM_SECOND_GROUP,'M200' NOM_NAME,
+			substr(NOMENCLATURE_ROMAN,1,1) NOM_FIRST_GROUP ,'WEB50.M_200_NOM_TO_SRV_DISTRICT' NOMLPU_TABLE_SAVE
+			from WEB50.M_200_NOMENCLATURE_REF
+			union all
+			select nomenclature DESCR, nomenclature CODE, regexp_replace(NOMENCLATURE,',.*','') NOM_SECOND_GROUP,
+			'M1K' NOM_NAME, substr(nomenclature,1,1) NOM_FIRST_GROUP, 'WEB50.M_1K_NOM_TO_SRV_DISTRICT' NOMLPU_TABLE_SAVE
+			from WEB50.M_1K_NOMENCLATURE_REF
+			order by NOM_SECOND_GROUP,CODE ) d
+			WHERE d.NOM_NAME=:NOM_NAME AND d.NOM_FIRST_GROUP=:NOM_FIRST_GROUP
+			AND (:NOM_SECOND_GROUP IS NULL OR d.NOM_SECOND_GROUP=:NOM_SECOND_GROUP)
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+  <!-- Список отфильтрованных ROUTE (задача администрирования ХОДО)-->
+  <data id="PODS_ROUTE_FOR_HODO" comment="PODS.ROUTE" schema="PODS" table="ROUTE">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>
+			SELECT * FROM (SELECT
+			r.ROUTE_ID ID
+			,r.ROUTE_ID
+			,r.TYPE_CL
+			,r.DESCRIPTION ROUTE_DESCR
+			,r.SEQUENCE
+			,r.CURRENT_INDICATOR_LF
+			,rtc.DESCRIPTION TYPE_CL_DESCR
+			,r.LINE_ID
+			,l.DESCRIPTION LINE_DESCR
+			,s.SERIES_ID
+			,s.STATION_BEGIN
+			,s.STATION_END
+			,s.ASCENDING
+			FROM PODS.ROUTE r
+			JOIN PODS.LINE l ON l.LINE_ID = r.LINE_ID
+			JOIN PODS.SERIES s ON s.ROUTE_ID=r.ROUTE_ID AND r.ROUTE_ID!=0
+			JOIN PODS.ROUTE_TYPE_CL rtc ON rtc.CODE=r.TYPE_CL) d
+			WHERE {FILTER}
+			ORDER BY TYPE_CL_DESCR,LINE_DESCR,ROUTE_DESCR,STATION_BEGIN,STATION_END,ID
+		</query>
+      </dbQuery>
+    </select>
+  </data>
+<!-- Список отфильтрованных ROUTE (задача администрирования ХОДО)-->
+<data id="PODS_ROUTE_FOR_HODO_CNT" comment="Запросы для работы CNT">
+    <select>
+      <dbQuery idField="ID">
+       <var name="FILTER" default="1=1" />
+        <query>
+          SELECT * FROM PODS.ROUTE WHERE 1=2
+        </query>
+      </dbQuery>
+   </select>
+  </data>
+  <!-- Список отфильтрованных inspections для выбранного ROUTE (задача администрирования ХОДО)-->
+  <data id="PODS_ILI_INSPECTIONS_FOR_HODO" comment="PODS.ROUTE" schema="PODS" table="ROUTE">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>
+			SELECT * FROM ( SELECT i.ILI_INSPECTION_ID ID
+			,i.ILI_INSPECTION_ID
+			,r.route_id ROUTE_ID
+			,ir.DESCRIPTION
+			,spb.station KM_START
+			,spe.station KM_END
+			,t.description COMPANY
+			,TO_CHAR (i.begin_date, 'DD.MM.YYYY') REPORT_DATE
+			,i.begin_date BEGIN_DATE
+			,(select count(*) from pods.ili_pipe_length pl where pl.ili_inspection_id = i.ili_inspection_id and pl.ref_event_id is not null) REF_CNT
+			FROM pods.ili_inspection i
+			JOIN pods.ili_inspection_range ir ON ir.ili_inspection_id = i.ili_inspection_id
+			JOIN pods.ili_tool_vendor_cl t on t.code = i.tool_vendor_cl
+			JOIN pods.event_range er ON er.event_id = ir.event_id
+			JOIN pods.station_point spb ON er.station_id_begin = spb.station_id
+			JOIN pods.station_point spe ON er.station_id_end = spe.station_id
+			JOIN pods.route r ON r.route_id = spb.route_id AND r.route_id = spe.route_id
+			WHERE EXISTS (SELECT 0 FROM pods.ili_pipe_length pl WHERE pl.ili_inspection_id = i.ili_inspection_id AND event_id IS NOT NULL)
+			ORDER BY i.begin_date DESC, t.description) d
+			WHERE {FILTER}
+			ORDER BY ROUTE_ID,BEGIN_DATE DESC,COMPANY,ID
+		</query>
+      </dbQuery>
+    </select>
+    <delete>
+      <dbCommand>
+        <var name="FILTER" default=" 1=2 " />
+        <query>
+			BEGIN
+			UPDATE PODS.ILI_PIPE_LENGTH d
+			SET d.REF_EVENT_ID = NULL, d.COMMENTS = NULL
+			WHERE {FILTER};
+			END;
+		</query>
+      </dbCommand>
+    </delete>
+  </data>
+  <!-- Список ROUTE для выбранного VIDEO (задача администрирования видеомониторинга)-->
+  <data id="ROUTES_FOR_LIB_DOC_GEO_VIDEO" comment="WEB50.LIB_DOC" schema="WEB50" table="LIB_DOC">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>
+          WITH s_gate AS (SELECT gate_id,substr(left_obj_id,15)::numeric obj_id, substr(right_obj_id,12)::numeric obj_route_id
+          FROM WEB50.LNK_GATE WHERE left_obj_id like 'WEB50_LIB_DOC/%' AND right_obj_id like 'PODS_ROUTE/%'
+          UNION  SELECT gate_id,substr(right_obj_id,15)::numeric obj_id, substr(left_obj_id,12)::numeric obj_route_id
+          FROM WEB50.LNK_GATE WHERE right_obj_id like 'WEB50_LIB_DOC/%' AND left_obj_id like 'PODS_ROUTE/%')
+
+          SELECT * FROM (SELECT sg.OBJ_ID ID
+          ,sg.OBJ_ROUTE_ID ROUTE_ID, r.DESCRIPTION, r.LINE_ID, s.STATION_BEGIN ,s.STATION_END
+          FROM s_gate sg
+          JOIN PODS.ROUTE r ON r.ROUTE_ID = sg.OBJ_ROUTE_ID
+          JOIN PODS.SERIES s ON s.ROUTE_ID=r.ROUTE_ID AND r.ROUTE_ID!=0
+          ) d
+          WHERE {FILTER}
+          ORDER BY ID
+        </query>
+      </dbQuery>
+    </select>
+    <insert>
+      <dbCommand>
+        <param name="ID" type="Int64" direction="Output" />
+        <param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+        <param name="LEFT_OBJ_ID" type="String" direction="Input" />
+        <param name="RIGHT_OBJ_ID" type="String" direction="Input" />
+        <query>
+          BEGIN   INSERT INTO WEB50.LNK_GATE (LEFT_OBJ_ID,RIGHT_OBJ_ID,LNK_TYPE_ID,CTIME,CUSER_ID,MTIME,MUSER_ID)
+          VALUES (:LEFT_OBJ_ID,:RIGHT_OBJ_ID,3,sysdate,:USER_ID,NULL,NULL) RETURNING GATE_ID INTO :ID;        END;
+        </query>
+      </dbCommand>
+    </insert>
+    <delete>
+      <dbCommand>
+        <param name="LEFT_OBJ_ID" type="String" direction="Input" />
+        <param name="RIGHT_OBJ_ID" type="String" direction="Input" />
+        <query>
+          BEGIN   DELETE FROM WEB50.LNK_GATE 
+          WHERE (LEFT_OBJ_ID = :LEFT_OBJ_ID AND RIGHT_OBJ_ID = :RIGHT_OBJ_ID) OR (LEFT_OBJ_ID = :RIGHT_OBJ_ID AND RIGHT_OBJ_ID = :LEFT_OBJ_ID);        END;
+        </query>
+      </dbCommand>
+    </delete>
+  </data>
+</root>

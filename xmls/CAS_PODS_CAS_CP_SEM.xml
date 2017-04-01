@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root version="5.3.2.2">
+  <data table="PI_PS_ON" schema="CAS" id="PI_PS_ON" comment="PODS.PI_PS_ON">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>SELECT * FROM (SELECT EVENT_ID ID, t.* FROM PODS.PI_CP_INSPECTION t) d WHERE {FILTER}</query>
+      </dbQuery>
+    </select>
+  </data>
+  <data table="PI_CP_PS_ON" schema="CAS" id="PI_CP_PS_ON" comment="PODS.PI_CP_PS_ON">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>SELECT * FROM (SELECT EVENT_ID ID, t.* FROM PODS.PI_CP_INSPECTION t) d WHERE {FILTER}</query>
+      </dbQuery>
+    </select>
+  </data>
+  <data table="PI_CP_PS_OFF" schema="CAS" id="PI_CP_PS_OFF" comment="PODS.PI_CP_PS_OFF">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>SELECT * FROM (SELECT EVENT_ID ID, t.* FROM PODS.PI_CP_INSPECTION t) d WHERE {FILTER}</query>
+      </dbQuery>
+    </select>
+  </data>
+  <data table="PI_DC_POTENTIAL_READING" schema="CAS" id="PI_DC_POTENTIAL_READING" comment="PODS.PI_DC_POTENTIAL_READING">
+    <select>
+      <dbQuery idField="ID">
+        <var name="FILTER" default="1=1" />
+        <query>SELECT * FROM (SELECT EVENT_ID ID, t.* FROM PODS.PI_CP_INSPECTION t) d WHERE {FILTER}</query>
+      </dbQuery>
+    </select>
+  </data>
+</root>
