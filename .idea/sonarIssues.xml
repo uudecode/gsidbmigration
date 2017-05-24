@@ -98,6 +98,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/b9fe7f97-9c48-4ed5-9498-1a4f5011a258/console.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/d6734b34-2ae9-40d9-9e07-8a2332f8d70b/console.sql">
           <value>
             <set />
@@ -133,7 +138,42 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/RESULT.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/meta.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ora2pg/15.Перенос данных из Oracle в Postgres/cr_const_pods.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ora2pg/15.Перенос данных из Oracle в Postgres/cr_tables_pods.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ora2pg/15.Перенос данных из Oracle в Postgres/cr_tables_web50.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ora2pg/15.Перенос данных из Oracle в Postgres/ins_data_pods.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ora2pg/15.Перенос данных из Oracle в Postgres/readme.txt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/ora2pg/15.Перенос данных из Oracle в Postgres/rename_all.sql">
           <value>
             <set />
           </value>
@@ -169,6 +209,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/ru/spb/trak/gsi/DbQuery.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/ru/spb/trak/gsi/GeoCommand.java">
           <value>
             <set />
           </value>
@@ -398,6 +443,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/xmls2/PODS_SEM_XXX.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/xmls2/SYS_SEM_XXX.xml">
           <value>
             <set />
@@ -509,6 +559,56 @@
           </value>
         </entry>
         <entry key="X:/Jet/cde/test.json">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/9be31f33-96fc-4d45-9aa9-e6ab66133f60/PODS.STO_131_PIPE_PARAMS_CL">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/9be31f33-96fc-4d45-9aa9-e6ab66133f60/PODS.STO_EHZ_CALC">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/9be31f33-96fc-4d45-9aa9-e6ab66133f60/PODS.STO_ILI_CLUSTER_CALC">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/9be31f33-96fc-4d45-9aa9-e6ab66133f60/PODS.STO_ILI_DATA_CALC">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/9be31f33-96fc-4d45-9aa9-e6ab66133f60/PODS.STO_ILI_DATA_CALC_ADV">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/9be31f33-96fc-4d45-9aa9-e6ab66133f60/PODS.STO_ILI_INSPECTION_CALC">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/9be31f33-96fc-4d45-9aa9-e6ab66133f60/PODS.STO_PIPE_SEGMENT_PARAMS">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/9be31f33-96fc-4d45-9aa9-e6ab66133f60/PODS.STO_TEMP_PIPE_PARAMS_TO_CALC">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/b9fe7f97-9c48-4ed5-9498-1a4f5011a258/ltg.pods.bond_lead">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="dbtable:/4a380c84/b9fe7f97-9c48-4ed5-9498-1a4f5011a258/ltg.pods.event_range">
           <value>
             <set />
           </value>

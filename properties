@@ -1,5 +1,5 @@
 xml.dir = xmls2
-xml.mask = WIDGET_SYS_SEM_XXX.xml
+xml.mask = PODS_GEO_XXX.xml
 db.host = 10.254.3.100
 db.port = 15432
 db.name = TEST

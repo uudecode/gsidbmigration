@@ -28,7 +28,7 @@
         <appender-ref ref="FILE" />
     </logger>
 
-    <logger name="ru.spb.trak.gsi.Query" level="debug" additivity="false">
+    <logger name="ru.spb.trak.gsi.Query" level="info" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </logger>

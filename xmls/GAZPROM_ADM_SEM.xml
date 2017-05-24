@@ -414,43 +414,43 @@ END;
     </update>
   </data>
   <!-- Список отфильтрованных PI_CP_INSPECTION (задача администрирования наружных обследований) -->
-  <data id="PODS_PI_CP_INSPECTION" comment="PODS.PI_CP_INSPECTION" schema="PODS" table="PI_CP_INSPECTION">
-    <select>
-      <dbQuery idField="ID">
-        <var name="FILTER" default="1=1" />
-        <query>
-			SELECT * FROM ( SELECT i.EVENT_ID ID
-			,ln.LINE_ID
-			,i.EVENT_ID
-			,i.DESCRIPTION
-			,ln.TYPE_CL
-			,ltc.DESCRIPTION TYPE_CL_DESCR
-			,TO_CHAR(inspection_date,'DD.MM.YYYY') REPORT_DATE
-			,CASE spb.line_id WHEN 0 THEN 'Не привязан' ELSE 'Привязан' END LINE_DESCR
-			,NULLIF(spb.station,0) KM_START
-			,NULLIF(spe.station,0) KM_END
-			,(SELECT COUNT(*) FROM pods.pi_anode_reading d WHERE d.pi_cp_event_id = i.event_id) PI_ANODE_READING_CNT
-			,(SELECT COUNT(*) FROM pods.pi_bond_reading d WHERE d.pi_cp_event_id = i.event_id) PI_BOND_READING_CNT
-			,(SELECT COUNT(*) FROM pods.pi_casing_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CASING_READING_CNT
-			,(SELECT COUNT(*) FROM pods.pi_cis_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CIS_READING_CNT
-			,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CP_READING_CNT
-			,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id AND replace(regexp_substr(d.comments,';.*;'),';') is not null ) PI_CP_READING_LNK_CNT
-			,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id AND EXISTS (SELECT 1 FROM pods.event_range ier WHERE ier.event_id = d.event_id AND station_id_begin != 0) ) PI_CP_READING_CALC_CNT
-			,(SELECT COUNT(*) FROM pods.pi_ground_bed_reading d WHERE d.pi_cp_event_id = i.event_id) PI_GROUND_BED_READING_CNT
-			,(SELECT COUNT(*) FROM pods.pi_rectifier_reading d WHERE d.pi_cp_event_id = i.event_id) PI_RECTIFIER_READING_CNT
-			FROM pods.pi_cp_inspection i
-			JOIN pods.event_range er ON er.event_id = i.event_id
-			JOIN pods.station_point spb ON spb.station_id = er.station_id_begin
-			JOIN pods.station_point spe ON spe.station_id = er.station_id_end
-			JOIN pods.line ln ON ln.line_id = spb.line_id
-			JOIN pods.line_type_cl ltc ON ltc.CODE = ln.TYPE_CL
-			WHERE i.event_id &gt; 0 ) d
-			WHERE {FILTER}
-			ORDER BY 6,4,9,10,7,2
-		</query>
-      </dbQuery>
-    </select>
-  </data>
+    <data id="PODS_PI_CP_INSPECTION" comment="PODS.PI_CP_INSPECTION" schema="PODS" table="PI_CP_INSPECTION">
+        <select>
+            <dbQuery idField="ID">
+                <var name="FILTER" default="1=1" />
+                <query>
+                    SELECT * FROM ( SELECT i.EVENT_ID ID
+                    ,ln.LINE_ID
+                    ,i.EVENT_ID
+                    ,i.DESCRIPTION
+                    ,ln.TYPE_CL
+                    ,ltc.DESCRIPTION TYPE_CL_DESCR
+                    ,TO_CHAR(inspection_date,'DD.MM.YYYY') REPORT_DATE
+                    ,CASE spb.line_id WHEN 0 THEN 'Не привязан' ELSE 'Привязан' END LINE_DESCR
+                    ,NULLIF(spb.station,0) KM_START
+                    ,NULLIF(spe.station,0) KM_END
+                    ,(SELECT COUNT(*) FROM pods.pi_anode_reading d WHERE d.pi_cp_event_id = i.event_id) PI_ANODE_READING_CNT
+                    ,(SELECT COUNT(*) FROM pods.pi_bond_reading d WHERE d.pi_cp_event_id = i.event_id) PI_BOND_READING_CNT
+                    ,(SELECT COUNT(*) FROM pods.pi_casing_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CASING_READING_CNT
+                    ,(SELECT COUNT(*) FROM pods.pi_cis_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CIS_READING_CNT
+                    ,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id) PI_CP_READING_CNT
+                    ,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id AND EXISTS( select replace(array_to_string(regexp_matches(d.comments,';.*;'),''),';','')) ) PI_CP_READING_LNK_CNT
+                    ,(SELECT COUNT(*) FROM pods.pi_cp_reading d WHERE d.pi_cp_event_id = i.event_id AND EXISTS (SELECT 1 FROM pods.event_range ier WHERE ier.event_id = d.event_id AND station_id_begin != 0) ) PI_CP_READING_CALC_CNT
+                    ,(SELECT COUNT(*) FROM pods.pi_ground_bed_reading d WHERE d.pi_cp_event_id = i.event_id) PI_GROUND_BED_READING_CNT
+                    ,(SELECT COUNT(*) FROM pods.pi_rectifier_reading d WHERE d.pi_cp_event_id = i.event_id) PI_RECTIFIER_READING_CNT
+                    FROM pods.pi_cp_inspection i
+                    JOIN pods.event_range er ON er.event_id = i.event_id
+                    JOIN pods.station_point spb ON spb.station_id = er.station_id_begin
+                    JOIN pods.station_point spe ON spe.station_id = er.station_id_end
+                    JOIN pods.line ln ON ln.line_id = spb.line_id
+                    JOIN pods.line_type_cl ltc ON ltc.CODE = ln.TYPE_CL
+                    WHERE i.event_id &gt; 0 ) d
+                    WHERE {FILTER}
+                    ORDER BY 6,4,9,10,7,2
+                </query>
+            </dbQuery>
+        </select>
+    </data>
 <!-- Список отфильтрованных PI_CP_INSPECTION (задача администрирования наружных обследований) -->
 <data id="PODS_PI_CP_INSPECTION_CNT" comment="Запросы для работы CNT">
     <select>
@@ -703,13 +703,13 @@ END;
     <select>
       <dbQuery idField="ID">
         <query>
-			SELECT '1:5000' DESCR, 'M5' CODE FROM DUAL
+			SELECT '1:5000' DESCR, 'M5' CODE
 			UNION ALL
-			SELECT '1:10000' DESCR, 'M10' CODE FROM DUAL
+			SELECT '1:10000' DESCR, 'M10' CODE
 			UNION ALL
-			SELECT '1:25000' DESCR, 'M25' CODE FROM DUAl
+			SELECT '1:25000' DESCR, 'M25' CODE
 			UNION ALL
-			SELECT '1:1000' DESCR, 'M1' CODE FROM DUAL
+			SELECT '1:1000' DESCR, 'M1' CODE
 			ORDER BY CODE
 		</query>
       </dbQuery>
@@ -825,11 +825,11 @@ END;
     <select>
       <dbQuery idField="ID">
         <query>
-			SELECT '1:100000' DESCR, 'M100' CODE FROM DUAL
+			SELECT '1:100000' DESCR, 'M100' CODE
 			UNION ALL
-			SELECT '1:1000000' DESCR, 'M1K' CODE FROM DUAL
+			SELECT '1:1000000' DESCR, 'M1K' CODE
 			UNION ALL
-			SELECT '1:200000' DESCR, 'M200' CODE FROM DUAL
+			SELECT '1:200000' DESCR, 'M200' CODE
 			ORDER BY CODE
 		</query>
       </dbQuery>

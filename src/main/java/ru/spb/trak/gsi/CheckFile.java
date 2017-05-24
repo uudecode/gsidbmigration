@@ -79,10 +79,20 @@ public class CheckFile {
                             currentQuery.setQueryType(queryType);
                             querySubType = reader.getLocalName();
                         }
+                        if ("geoCommand".equals(reader.getLocalName())) {
+                            currentQuery = new GeoCommand(checkingFile.toString(), properties);
+                            currentQuery.setTableName(tableName);
+                            currentQuery.setQueryType(queryType);
+                            querySubType = reader.getLocalName();
+                        }
+
                         if ("var".equals(reader.getLocalName())) {
                             currentQuery.getVars().put(reader.getAttributeValue(0).toString(), ((null != reader.getAttributeValue(1)) && !"".equals(reader.getAttributeValue(1))) ? reader.getAttributeValue(1).toString() : "0");
                         }
                         if ("query".equals(reader.getLocalName())) {
+                            queryTextGoing = true;
+                        }
+                        if ("object".equals(reader.getLocalName())) {
                             queryTextGoing = true;
                         }
                         if ("data".equals(reader.getLocalName())) {
@@ -108,7 +118,7 @@ public class CheckFile {
                     }
                     case XMLStreamConstants.END_ELEMENT: {
                         LOGGER.debug("END_ELEMENT: {}", reader.getLocalName());
-                        if ("geoQuery".equals(reader.getLocalName()) || "dbQuery".equals(reader.getLocalName()) || "xmlQuery".equals(reader.getLocalName()) || "xmlCommand".equals(reader.getLocalName()) || "dbCommand".equals(reader.getLocalName())) {
+                        if ("geoQuery".equals(reader.getLocalName()) || "dbQuery".equals(reader.getLocalName()) || "xmlQuery".equals(reader.getLocalName()) || "xmlCommand".equals(reader.getLocalName()) || "dbCommand".equals(reader.getLocalName()) || "geoCommand".equals(reader.getLocalName())) {
                             queryTextGoing = false;
                             currentQuery.prepareQueryText();
                             try {

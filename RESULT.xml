@@ -1,0 +1,721 @@
+﻿<root version="6.0.2.0">
+	<!--LIB_DOC_GEO.xml-->
+	<data id="LIB_DOC" comment="WEB50.LIB_DOC" schema="WEB50" table="LIB_DOC" descr="Геокодированные документы">
+		<insert>
+			<geoCommand>
+				<param name="ID" type="Int64" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<object>					
+					BEGIN
+					INSERT INTO WEB50.LIB_COVERAGE(GID, WKB_GEOMETRY,"XMIN","XMAX",YMIN,YMAX,CTIME,CUSER_ID)
+					VALUES(:ID, :WKB, :XMIN, :XMAX, :YMIN, :YMAX,current_timestamp,:USER_ID);
+
+					UPDATE WEB50.LIB_DOC
+					SET GID = :ID
+					WHERE DOC_ID = :ID;					
+					END;
+				</object>
+			</geoCommand>
+		</insert>
+		<update>
+			<geoCommand>
+				<param name="ID" type="Int64" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<object>					
+					BEGIN
+					UPDATE WEB50.LIB_COVERAGE
+					SET WKB_GEOMETRY=:WKB
+					,"XMIN"=:XMIN
+					,"XMAX"=:XMAX
+					,YMIN=:YMIN
+					,YMAX=:YMAX
+					,MTIME=current_timestamp
+					,MUSER_ID=:USER_ID
+					WHERE GID = :ID;					
+					END;
+				</object>
+			</geoCommand>
+		</update>
+		<delete>
+			<dbCommand>
+				<param name="ID" type="Int64" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<query>					
+					BEGIN
+					UPDATE WEB50.LIB_DOC
+					SET GID = NULL
+					,MTIME=current_timestamp
+					,MUSER_ID=:USER_ID
+					WHERE DOC_ID = :ID;
+
+					DELETE
+					FROM WEB50.LIB_COVERAGE
+					WHERE GID = :ID;
+					END;					
+				</query>
+			</dbCommand>
+		</delete>
+	</data>
+	
+	<!-- LIB_DOC_SEM.xml -->
+	<data id="LIB_DOC" comment="WEB50.LIB_DOC" schema="WEB50" table="LIB_DOC" descr="Геокодированные документы">		
+		<!-- В скрипте используется вставка только файла, поэтому DOC_TYPE_ID=1 !!! В этом же скрипте вставляется LIB_DOC_VERSION -->
+		<insert>
+			<dbCommand>
+				<param name="ID" type="Int64" direction="Output" />
+				<param name="NAME" type="String" direction="Input" />
+				<param name="DESCR" type="String" direction="Input" />
+				<param name="PARENT_DOC_ID" type="Int64" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<param name="MIME_NAME" type="String" direction="Input" />
+				<param name="STORAGE_ID" type="Int64" direction="Input" default="0"/>
+				<param name="FILE_NAME" type="String" direction="Input" />
+				<param name="STATUS_ID" type="Int64" direction="Input" />
+				<query>
+					DECLARE varDocId NUMBER;
+					BEGIN
+					:MIME_NAME := regexp_substr(:FILE_NAME,'\..*$');
+					INSERT INTO WEB50.LIB_DOC(NAME,DESCR,PROVIDER,STATUS_ID
+					,TIME_STAMP,DOC_TYPE_ID,PARENT_DOC_ID
+					,CTIME,CUSER_ID)
+					VALUES(:NAME,:DESCR,NULL,:STATUS_ID,current_timestamp,1,:PARENT_DOC_ID,current_timestamp,:USER_ID)
+					RETURNING DOC_ID INTO varDocId;
+					INSERT INTO WEB50.LIB_DOC_VERSION (DOC_ID,NEXT_DOC_VERSION_ID,MIME_TYPE_ID,STORAGE_ID,NAME,DESCR,VERSION_NUMBER,BODY,FILE_NAME,CTIME,CUSER_ID,MTIME,MUSER_ID)
+					VALUES (varDocId,NULL,(SELECT DISTINCT FIRST_VALUE(MIME_TYPE_ID) OVER (ORDER BY MIME_TYPE_ID DESC) FROM WEB50.LIB_MIME_TYPE_REF WHERE (EXTENSION_NAME = :MIME_NAME OR MIME_TYPE_ID = 0)),
+					:STORAGE_ID,NULL,'Начальная вставка',1.0,NULL,:FILE_NAME,current_timestamp,:USER_ID,NULL,NULL);
+					:ID := varDocId;
+					END;					
+				</query>
+			</dbCommand>
+		</insert>
+		<update>
+			<dbCommand>
+				<param name="NAME" type="String" direction="Input" />
+				<param name="DESCR" type="String" direction="Input" />
+				<param name="PARENT_DOC_ID" type="Int64" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<param name="MIME_NAME" type="String" direction="Input" />
+				<param name="ID" type="Int64" direction="Input" />
+				<param name="STATUS_ID" type="Int64" direction="Input" />
+				<query>					
+					BEGIN
+					:MIME_NAME := regexp_substr(:FILE_NAME,'\..*$');
+					UPDATE WEB50.LIB_DOC
+					SET
+					NAME = :NAME
+					,DESCR = :DESCR
+					,PARENT_DOC_ID = :PARENT_DOC_ID
+					,MTIME = current_timestamp
+					,MUSER_ID = :USER_ID
+					,STATUS_ID = :STATUS_ID
+					WHERE DOC_ID = :ID;
+					UPDATE WEB50.LIB_DOC_VERSION SET MIME_TYPE_ID=(SELECT DISTINCT FIRST_VALUE(MIME_TYPE_ID) OVER (ORDER BY MIME_TYPE_ID DESC) FROM WEB50.LIB_MIME_TYPE_REF WHERE (EXTENSION_NAME = :MIME_NAME OR MIME_TYPE_ID = 0)),
+					NAME='Документ изменен',FILE_NAME=:FILE_NAME,MTIME=current_timestamp,MUSER_ID=:USER_ID
+					WHERE DOC_ID = :ID;
+					END;					
+				</query>
+			</dbCommand>
+		</update>
+		<delete>
+			<dbCommand>
+				<param name="ID" type="Int64" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<query>					
+					BEGIN
+					DELETE
+					FROM WEB50.LIB_DOC_VERSION
+					WHERE DOC_ID = :ID;
+
+					DELETE FROM WEB50.LIB_DOC WHERE DOC_ID = :ID;
+					END;					
+				</query>
+			</dbCommand>
+		</delete>
+	</data>
+	
+	<!-- SYS_SEM.xml -->
+	<data id="WEB50_B_USER_PRIVATE" comment="Запросы для работы с таблицей WEB50.B_USER_PRIVATE">		
+		<insert>
+			<dbCommand>
+				<param name="ID" type="Int64" direction="Output" />
+				<param name="LOGIN" type="String" direction="Input" />
+				<param name="PASSWORD" type="String" direction="Input" />
+				<param name="LASTNAME" type="String" direction="Input" />
+				<param name="FIRSTNAME" type="String" direction="Input" />
+				<param name="SECONDNAME" type="String" direction="Input" />
+				<param name="SEX" type="String" direction="Input" />
+				<param name="BIRTHDAY" type="DateTime" direction="Input" />
+				<param name="MAIL" type="String" direction="Input" />
+				<param name="PICTURE" type="String" direction="Input" />
+				<param name="TIMEZONE" type="String" direction="Input" />
+				<param name="STATUS" type="String" direction="Input" />
+				<param name="SECURITY_QUESTION" type="String" direction="Input" />
+				<param name="SECURITY_ANSWER" type="String" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<query>
+					DECLARE v_user_id NUMBER;
+					same_user_id NUMBER;
+					BEGIN
+					SELECT COUNT(*) INTO same_user_id FROM WEB50.B_USER_PUBLIC WHERE UPPER(NICKNAME)=UPPER(:LOGIN);
+					IF (same_user_id &gt; 0)
+					THEN
+					RAISE_APPLICATION_ERROR(-20701,'Невозможно создать пользователя. Пользователь с таким именем уже существует.');
+					ELSE
+					INSERT INTO WEB50.B_USER_PUBLIC (NICKNAME,CUSER_ID) VALUES (:LOGIN,-1) RETURNING USER_ID INTO v_user_id;
+					INSERT INTO WEB50.B_USER_PRIVATE(USER_ID ,LOGIN ,PASSWORD ,LASTNAME ,FIRSTNAME ,SECONDNAME ,SEX ,BIRTHDAY
+					,MAIL ,PICTURE ,TIMEZONE ,STATUS ,LANGUAGE ,SECURITY_QUESTION ,SECURITY_ANSWER
+					,CREATED ,CUSER_ID)
+					VALUES(v_user_id ,:LOGIN ,:PASSWORD ,:LASTNAME ,:FIRSTNAME ,:SECONDNAME ,:SEX
+					,:BIRTHDAY ,:MAIL ,:PICTURE ,:TIMEZONE ,:STATUS ,'ru' ,:SECURITY_QUESTION
+					,:SECURITY_ANSWER ,current_timestamp,-1 )
+					RETURNING v_user_id INTO :ID;
+					INSERT INTO WEB50.B_USER_TO_B_ROLE(USER_ID,ROLE_ID,CTIME,CUSER_ID) VALUES (:ID,1046,current_timestamp,0);
+					END IF;
+					END;
+				</query>
+			</dbCommand>
+		</insert>
+		<update>
+			<dbCommand>
+				<param name="SYS_OBJ_ID" type="Int64" direction="Input" />
+				<param name="LASTNAME" type="String" direction="Input" />
+				<param name="FIRSTNAME" type="String" direction="Input" />
+				<param name="SECONDNAME" type="String" direction="Input" />
+				<param name="SEX" type="String" direction="Input" />
+				<param name="BIRTHDAY" type="DateTime" direction="Input" />
+				<param name="MAIL" type="String" direction="Input" />
+				<param name="TIMEZONE" type="String" direction="Input" />
+				<param name="LANGUAGE" type="String" direction="Input" />
+				<param name="SECURITY_QUESTION" type="String" direction="Input" />
+				<param name="SECURITY_ANSWER" type="String" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<query>
+					BEGIN
+					UPDATE WEB50.B_USER_PRIVATE
+					SET
+					LASTNAME = :LASTNAME
+					,FIRSTNAME = :FIRSTNAME
+					,SECONDNAME = :SECONDNAME
+					,SEX = :SEX
+					,BIRTHDAY = :BIRTHDAY
+					,MAIL = :MAIL
+					,TIMEZONE = :TIMEZONE
+					,LANGUAGE = :LANGUAGE
+					,SECURITY_QUESTION = :SECURITY_QUESTION
+					,SECURITY_ANSWER = :SECURITY_ANSWER
+					,MTIME = current_timestamp
+					,MUSER_ID = :USER_ID
+					WHERE USER_ID = :SYS_OBJ_ID;
+					END;
+				</query>
+			</dbCommand>
+		</update>
+		<delete>
+			<dbCommand>
+				<param name="SYS_OBJ_ID" type="Int64" direction="Input" />
+				<param name="USER_ID" type="Int64" direction="Input" />
+				<query>
+					BEGIN
+					UPDATE WEB50.B_USER_PRIVATE SET STATUS = 'B'
+					WHERE USER_ID = :SYS_OBJ_ID;
+					END;
+				</query>
+			</dbCommand>
+		</delete>
+	</data>
+	
+	
+	
+	<!-- PODS_SEM_DICT.xml -->
+	<data id="PODS_CONTACT_TYPE_CL" comment="PODS.CONTACT_TYPE_CL" schema="PODS" table="CONTACT_TYPE_CL">		
+		<insert>
+			<dbCommand>
+				<param name="ID" type="String" direction="Output"/>
+				<param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_CONTACT_TYPE_CL" />
+				<var name="POLICY" default="POLICY.xml#INSERT_PODS_SEM_DICT"  />
+				<query>
+					BEGIN
+					INSERT INTO PODS.CONTACT_TYPE_CL
+					(CODE, DESCRIPTION, ACTIVE_INDICATOR_LF, SOURCE_GCL)
+					VALUES
+					('{CODE}', '{DESCR}', '{ACTIVE_INDICATOR_LF}', '{SOURCE_GCL}');
+					:ID := '{CODE}';
+					END;
+				</query>
+			</dbCommand>
+		</insert>
+		<update>
+			<dbCommand>
+				<param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_CONTACT_TYPE_CL" />
+				<var name="POLICY" default="POLICY.xml#UPDATE_PODS_SEM_DICT"  />
+				<query>
+					BEGIN
+					UPDATE PODS.CONTACT_TYPE_CL SET
+					DESCRIPTION = '{DESCR}',
+					ACTIVE_INDICATOR_LF = '{ACTIVE_INDICATOR_LF}',
+					SOURCE_GCL = '{SOURCE_GCL}'
+					WHERE CODE = '{CODE}';
+					END;
+				</query>
+			</dbCommand>
+		</update>
+		<delete>
+			<dbCommand>
+				<param name="USER_ID" default="-1" type="Int64" direction="Input"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_CONTACT_TYPE_CL" />
+				<var name="POLICY" default="POLICY.xml#DELETE_PODS_SEM_DICT"  />
+				<query>
+					BEGIN
+					DELETE FROM PODS.CONTACT_TYPE_CL WHERE CODE = '{CODE}';
+					END;
+				</query>
+			</dbCommand>
+		</delete>
+	</data>
+	
+	<!--  PODS_GEO.xml -->
+	<data id="PODS_VALVE" comment="PODS.VALVE" schema="PODS" table="VALVE">
+		<insert>
+			<geoCommand proc="GET_LPU">
+				<param name="ID" type="Int64"/>
+				<param name="PODS_USER" type="String"/>
+				<param name="USER_ID" default="-1" type="Int64"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_VALVE" />
+				<var name="POLICY" default="POLICY.xml#INSERT_PODS_GEO"  />
+				<coord>
+					DECLARE
+					v_grant VARCHAR2(7);
+					BEGIN
+					BEGIN
+					WITH granted_lpu
+					AS (SELECT rf.value srv_district_id
+					FROM web50.b_user_to_b_role u2r
+					JOIN web50.b_role_to_b_policy r2p
+					ON u2r.role_id = r2p.role_id
+					JOIN web50.b_policy_rules pr
+					ON r2p.policy_id = pr.policy_id
+					JOIN web50.b_policy_rule_filters rf
+					ON pr.rule_id = rf.rule_id
+					WHERE user_id = :USER_ID
+					AND pr.class_id = 'PODS_SRV_DISTRICT_GCL'
+					AND rf.operator = '='),
+					some_grants
+					AS (SELECT 1
+					FROM web50.b_user_to_b_role u2r
+					JOIN web50.b_role_to_b_policy r2p
+					ON u2r.role_id = r2p.role_id
+					JOIN web50.b_policy_rules pr
+					ON r2p.policy_id = pr.policy_id
+					WHERE user_id = :USER_ID
+					AND pr.class_id = 'PODS_SRV_DISTRICT_GCL' and pr.select_permitted &gt; 0)
+					SELECT 'Granted' status
+					INTO v_grant
+					FROM dual
+					WHERE (EXISTS (SELECT 1
+					FROM granted_lpu gl
+					WHERE TO_CHAR(:LPU_ID) = gl.srv_district_id)
+					AND EXISTS (SELECT 1 FROM some_grants))
+					OR NOT EXISTS (SELECT 1 FROM some_grants);
+
+
+					EXCEPTION
+					WHEN NO_DATA_FOUND THEN
+					RAISE_APPLICATION_ERROR(-20772,'Вы пытаетесь внести данные вне установленных ограничений по геометрии. Бланк объекта сохранен. Свяжитесь с администратором.');
+					WHEN OTHERS THEN
+					RAISE;
+					END;
+
+
+					DECLARE
+					loc_id   NUMERIC (16, 0);
+					sp_id    NUMERIC (16, 0);
+					BEGIN
+					SELECT MAX(sp.station_id) INTO sp_id
+					FROM pods.coordinate  c
+					JOIN pods.station_point sp ON sp.location_id = c.location_id
+					WHERE ROUND(c.X_COORD,6)*1000000000+ROUND(c.Y_COORD,6)=ROUND(:X,6)*1000000000+ROUND(:Y,6)
+					AND sp.route_id != 0;
+
+					IF sp_id IS NULL THEN
+					INSERT INTO PODS.LOCATION(SRV_DISTRICT_GCL)
+					VALUES (:LPU_ID)
+					RETURNING LOCATION_ID INTO loc_id;
+
+					INSERT INTO PODS.COORDINATE  (COORDINATE_SOURCE_ID, TYPE_CL,
+					LOCATION_ID, X_COORD, Y_COORD, Z_COORD, HORIZ_INDICATOR_LF,
+					VERT_INDICATOR_LF, CURRENT_INDICATOR_LF, EFFECTIVE_FROM_DATE, PODS_USER, CREATE_DATE)
+					VALUES (0, 'USR', loc_id, :X, :Y, :Z, 'Y', 'N', 'Y', current_timestamp, :PODS_USER,current_timestamp);
+
+					INSERT INTO PODS.STATION_POINT (TYPE_CL, LOCATION_ID, LINE_ID,
+					SERIES, STATION, SERIES_ID, ROUTE_ID, MEASURE, PODS_USER, CREATE_DATE)
+					VALUES ('ST_POINT_TYPE_02', loc_id, 0, 0, 0, 0, 0, 0, :PODS_USER, current_timestamp)
+					RETURNING STATION_ID INTO sp_id;
+					END IF;
+
+					UPDATE PODS.EVENT_RANGE
+					SET STATION_ID_BEGIN = sp_id, STATION_ID_END = sp_id
+					WHERE EVENT_ID = :ID;
+					END;
+
+					END;
+				</coord>
+			</geoCommand>
+		</insert>
+		<update>
+			<geoCommand proc="GET_LPU">
+				<param name="ID" type="Int64"/>
+				<param name="PODS_USER" type="String"/>
+				<param name="USER_ID" default="-1" type="Int64"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_VALVE" />
+				<var name="POLICY" default="POLICY.xml#UPDATE_PODS_GEO"  />
+				<coord>
+					DECLARE
+					v_grant VARCHAR2(7);
+					BEGIN
+					BEGIN
+					WITH granted_lpu
+					AS (SELECT rf.value srv_district_id
+					FROM web50.b_user_to_b_role u2r
+					JOIN web50.b_role_to_b_policy r2p
+					ON u2r.role_id = r2p.role_id
+					JOIN web50.b_policy_rules pr
+					ON r2p.policy_id = pr.policy_id
+					JOIN web50.b_policy_rule_filters rf
+					ON pr.rule_id = rf.rule_id
+					WHERE user_id = :USER_ID
+					AND pr.class_id = 'PODS_SRV_DISTRICT_GCL'
+					AND rf.operator = '='),
+					some_grants
+					AS (SELECT 1
+					FROM web50.b_user_to_b_role u2r
+					JOIN web50.b_role_to_b_policy r2p
+					ON u2r.role_id = r2p.role_id
+					JOIN web50.b_policy_rules pr
+					ON r2p.policy_id = pr.policy_id
+					WHERE user_id = :USER_ID
+					AND pr.class_id = 'PODS_SRV_DISTRICT_GCL' and pr.select_permitted &gt; 0)
+					SELECT 'Granted' status
+					INTO v_grant
+					FROM dual
+					WHERE (EXISTS (SELECT 1
+					FROM granted_lpu gl
+					WHERE TO_CHAR(:LPU_ID) = gl.srv_district_id)
+					AND EXISTS (SELECT 1 FROM some_grants))
+					OR NOT EXISTS (SELECT 1 FROM some_grants);
+
+
+					EXCEPTION
+					WHEN NO_DATA_FOUND THEN
+					RAISE_APPLICATION_ERROR(-20772,'Вы пытаетесь внести данные вне установленных ограничений по геометрии. Бланк объекта сохранен. Свяжитесь с администратором.');
+					WHEN OTHERS THEN
+					RAISE;
+					END;
+
+
+					BEGIN
+					UPDATE PODS.COORDINATE
+					SET X_COORD = :X,
+					Y_COORD = :Y
+					WHERE LOCATION_ID IN (SELECT sp.LOCATION_ID
+					FROM pods.event_range e
+					JOIN pods.station_point sp ON sp.station_id = e.station_id_begin
+					WHERE EVENT_ID = :ID);
+
+					UPDATE PODS.LOCATION
+					SET SRV_DISTRICT_GCL = :LPU_ID
+					WHERE LOCATION_ID IN (SELECT sp.LOCATION_ID
+					FROM pods.event_range e
+					JOIN pods.station_point sp ON sp.station_id = e.station_id_begin
+					WHERE e.event_id = :ID);
+					END;
+					END;
+				</coord>
+			</geoCommand>
+		</update>
+		<delete>
+			<dbCommand>
+				<param name="ID" type="Int64"/>
+				<param name="USER_ID" default="-1" type="Int64"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_VALVE" />
+				<var name="POLICY" default="POLICY.xml#DELETE_PODS_GEO"  />
+				<query>
+					BEGIN
+					UPDATE PODS.EVENT_RANGE SET STATION_ID_BEGIN = 0, STATION_ID_END = 0 WHERE EVENT_ID = :ID;
+					END;
+				</query>
+			</dbCommand>
+		</delete>
+	</data>
+	
+	
+	<!-- PODS_SEM.xml -->
+	<data table="VALVE" schema="PODS" id="PODS_VALVE" comment="PODS.VALVE">
+		<insert>
+			<dbCommand>
+				<param name="EVENT_GUID" default="" type="String"/>
+				<param name="VALVE_IDENTIFIER" default="" type="String"/>
+				<param name="NAME" default="" type="String"/>
+				<param name="NOMINAL_DIAMETER_INLET_GCL" default="0" type="Decimal"/>
+				<param name="NOMINAL_DIAMETER_OUTLET_GCL" default="0" type="Decimal"/>
+				<param name="TYPE_CL" default="UNKNOWN" type="String"/>
+				<param name="SERIAL_NUMBER" default="" type="String"/>
+				<param name="MODEL" default="" type="String"/>
+				<param name="MANUFACTURER_CL" default="UNKNOWN" type="String"/>
+				<param name="DATE_MANUFACTURED" default="" type="DateTime"/>
+				<param name="SPECIFICATION_CL" default="UNKNOWN" type="String"/>
+				<param name="MILL_TEST_PRESSURE" default="" type="Decimal"/>
+				<param name="NOMINAL_PRESSURE_RATING" default="" type="Decimal"/>
+				<param name="NOMINAL_PRESSURE_RATING_INLET" default="" type="Decimal"/>
+				<param name="NOMINAL_PRESSURE_RATING_OUTLET" default="" type="Decimal"/>
+				<param name="DATE_INSTALLED" default="" type="DateTime"/>
+				<param name="FUNCTION_CL" default="UNKNOWN" type="String"/>
+				<param name="JOINT_TYPE_CL" default="UNKNOWN" type="String"/>
+				<param name="MATERIAL_CL" default="UNKNOWN" type="String"/>
+				<param name="DESCRIPTION" default="" type="String"/>
+				<param name="SOURCE_GCL" default="UNKNOWN" type="String"/>
+				<param name="COMMENTS" default="" type="String"/>
+				<param name="ID" type="Int64" direction="Output"/>
+				<param name="PODS_USER" type="String"/>
+				<param name="USER_ID" default="-1" type="Int64"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_VALVE" />
+				<var name="POLICY" default="POLICY.xml#INSERT_PODS_SEM"  />
+				<query>
+					BEGIN
+					INSERT INTO PODS.EVENT_RANGE (EVENT_GUID,FEATURE_ID,STATION_ID_BEGIN,STATION_ID_END,PODS_USER,CREATE_DATE,EFFECTIVE_FROM_DATE,CURRENT_INDICATOR_LF,POSITIONING_TYPE_CL)
+					VALUES(:EVENT_GUID,'VALVE',0,0,:PODS_USER,current_timestamp,current_timestamp,'Y','UNKNOWN')
+					RETURNING EVENT_ID INTO :ID;
+
+					INSERT INTO PODS.VALVE(EVENT_ID,EVENT_GUID,VALVE_IDENTIFIER,NAME,NOMINAL_DIAMETER_INLET_GCL,NOMINAL_DIAMETER_OUTLET_GCL,TYPE_CL,SERIAL_NUMBER,MODEL,MANUFACTURER_CL,DATE_MANUFACTURED,SPECIFICATION_CL,MILL_TEST_PRESSURE,NOMINAL_PRESSURE_RATING,NOMINAL_PRESSURE_RATING_INLET,NOMINAL_PRESSURE_RATING_OUTLET,DATE_INSTALLED,FUNCTION_CL,JOINT_TYPE_CL,MATERIAL_CL,DESCRIPTION,SOURCE_GCL,COMMENTS)
+					VALUES(:ID,:EVENT_GUID,:VALVE_IDENTIFIER,:NAME,:NOMINAL_DIAMETER_INLET_GCL,:NOMINAL_DIAMETER_OUTLET_GCL,:TYPE_CL,:SERIAL_NUMBER,:MODEL,:MANUFACTURER_CL,:DATE_MANUFACTURED,:SPECIFICATION_CL,:MILL_TEST_PRESSURE,:NOMINAL_PRESSURE_RATING,:NOMINAL_PRESSURE_RATING_INLET,:NOMINAL_PRESSURE_RATING_OUTLET,:DATE_INSTALLED,:FUNCTION_CL,:JOINT_TYPE_CL,:MATERIAL_CL,:DESCRIPTION,:SOURCE_GCL,:COMMENTS);
+					END;
+				</query>
+			</dbCommand>
+		</insert>
+		<update>
+			<dbCommand>
+				<param name="EVENT_GUID" default="" type="String"/>
+				<param name="VALVE_IDENTIFIER" default="" type="String"/>
+				<param name="NAME" default="" type="String"/>
+				<param name="NOMINAL_DIAMETER_INLET_GCL" default="0" type="Decimal"/>
+				<param name="NOMINAL_DIAMETER_OUTLET_GCL" default="0" type="Decimal"/>
+				<param name="TYPE_CL" default="UNKNOWN" type="String"/>
+				<param name="SERIAL_NUMBER" default="" type="String"/>
+				<param name="MODEL" default="" type="String"/>
+				<param name="MANUFACTURER_CL" default="UNKNOWN" type="String"/>
+				<param name="DATE_MANUFACTURED" default="" type="DateTime"/>
+				<param name="SPECIFICATION_CL" default="UNKNOWN" type="String"/>
+				<param name="MILL_TEST_PRESSURE" default="" type="Decimal"/>
+				<param name="NOMINAL_PRESSURE_RATING" default="" type="Decimal"/>
+				<param name="NOMINAL_PRESSURE_RATING_INLET" default="" type="Decimal"/>
+				<param name="NOMINAL_PRESSURE_RATING_OUTLET" default="" type="Decimal"/>
+				<param name="DATE_INSTALLED" default="" type="DateTime"/>
+				<param name="FUNCTION_CL" default="UNKNOWN" type="String"/>
+				<param name="JOINT_TYPE_CL" default="UNKNOWN" type="String"/>
+				<param name="MATERIAL_CL" default="UNKNOWN" type="String"/>
+				<param name="DESCRIPTION" default="" type="String"/>
+				<param name="SOURCE_GCL" default="UNKNOWN" type="String"/>
+				<param name="COMMENTS" default="" type="String"/>
+				<param name="ID" type="Int64"/>
+				<param name="USER_ID" default="-1" type="Int64"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_VALVE" />
+				<var name="POLICY" default="POLICY.xml#UPDATE_PODS_SEM"  />
+				<query>
+					BEGIN
+					UPDATE PODS.VALVE
+					SET EVENT_GUID=:EVENT_GUID,VALVE_IDENTIFIER=:VALVE_IDENTIFIER,NAME=:NAME,NOMINAL_DIAMETER_INLET_GCL=:NOMINAL_DIAMETER_INLET_GCL,NOMINAL_DIAMETER_OUTLET_GCL=:NOMINAL_DIAMETER_OUTLET_GCL,TYPE_CL=:TYPE_CL,SERIAL_NUMBER=:SERIAL_NUMBER,MODEL=:MODEL,MANUFACTURER_CL=:MANUFACTURER_CL,DATE_MANUFACTURED=:DATE_MANUFACTURED,SPECIFICATION_CL=:SPECIFICATION_CL,MILL_TEST_PRESSURE=:MILL_TEST_PRESSURE,NOMINAL_PRESSURE_RATING=:NOMINAL_PRESSURE_RATING,NOMINAL_PRESSURE_RATING_INLET=:NOMINAL_PRESSURE_RATING_INLET,NOMINAL_PRESSURE_RATING_OUTLET=:NOMINAL_PRESSURE_RATING_OUTLET,DATE_INSTALLED=:DATE_INSTALLED,FUNCTION_CL=:FUNCTION_CL,JOINT_TYPE_CL=:JOINT_TYPE_CL,MATERIAL_CL=:MATERIAL_CL,DESCRIPTION=:DESCRIPTION,SOURCE_GCL=:SOURCE_GCL,COMMENTS=:COMMENTS
+					WHERE EVENT_ID = :ID;
+					END;
+				</query>
+			</dbCommand>
+		</update>
+		<delete>
+			<dbCommand>
+				<param name="ID" type="Int64"/>
+				<param name="USER_ID" default="-1" type="Int64"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="PODS_VALVE" />
+				<var name="POLICY" default="POLICY.xml#DELETE_PODS_SEM"  />
+				<query>
+					BEGIN
+
+					UPDATE PODS.EVENT_RANGE
+					SET CURRENT_INDICATOR_LF='N'
+					WHERE EVENT_ID = :ID;
+
+					DELETE
+					FROM PODS.VALVE_OPERATOR
+					WHERE EVENT_ID = :ID;
+
+					DELETE
+					FROM PODS.VALVE
+					WHERE EVENT_ID = :ID;
+
+					DELETE
+					FROM WEB50.LNK_GATE
+					WHERE LEFT_OBJ_ID = 'PODS_VALVE/'||CAST(:ID AS VARCHAR(30))
+					OR RIGHT_OBJ_ID = 'PODS_VALVE/'||CAST(:ID AS VARCHAR(30));
+
+					DELETE
+					FROM WEB50.LNK_GATE
+					WHERE LEFT_OBJ_ID = 'PODS_VALVE_OPERATOR/'||CAST(:ID AS VARCHAR(30))
+					OR RIGHT_OBJ_ID = 'PODS_VALVE_OPERATOR/'||CAST(:ID AS VARCHAR(30));
+					END;
+				</query>
+			</dbCommand>
+		</delete>
+	</data>
+	
+	
+	<!-- M_1_SEM.xml -->
+	<data table="M_1_RELIEF" schema="WEB50" id="WEB50_M_1_RELIEF" comment="WEB50.M_1_RELIEF">
+		<insert>
+			<dbCommand>
+				<param name="CODE" default="" type="String"/>
+				<param name="TOPO" default="" type="Decimal"/>
+				<param name="DESCR" default="" type="String"/>
+				<param name="C1" default="" type="Decimal"/>
+				<param name="C3" default="" type="String"/>
+				<param name="C4" default="" type="String"/>
+				<param name="C7" default="" type="Decimal"/>
+				<param name="C9" default="" type="String"/>
+				<param name="C11" default="" type="Decimal"/>
+				<param name="C31" default="" type="String"/>
+				<param name="C34" default="" type="String"/>
+				<param name="C47" default="" type="String"/>
+				<param name="C55" default="" type="String"/>
+				<param name="C78" default="" type="Decimal"/>
+				<param name="C109" default="" type="Decimal"/>
+				<param name="C114" default="" type="Decimal"/>
+				<param name="C115" default="" type="Decimal"/>
+				<param name="C184" default="" type="String"/>
+				<param name="C189" default="" type="String"/>
+				<param name="C196" default="" type="String"/>
+				<param name="C197" default="" type="String"/>
+				<param name="C203" default="" type="String"/>
+				<param name="C208" default="" type="Decimal"/>
+				<param name="C233" default="" type="String"/>
+				<param name="C234" default="" type="String"/>
+				<param name="C301" default="" type="Decimal"/>
+				<param name="C302" default="" type="Decimal"/>
+				<param name="C303" default="" type="String"/>
+				<param name="C304" default="" type="String"/>
+				<param name="C307" default="" type="String"/>
+				<param name="CLASSIFIER_ID" default="" type="Decimal"/>
+				<param name="ZONE_ID" default="0" type="Decimal"/>
+				<param name="USER_ID" default="-1" type="Decimal"/>
+				<param name="USER_LOGIN" default="" type="String"/>
+				<param name="ID" type="Int64" direction="Output"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="WEB50_M1_MAP" />
+				<var name="POLICY" default="POLICY.xml#INSERT_M_SEM"  />
+				<query>
+					INSERT INTO WEB50.M_1_RELIEF(OBJ_CLS_ID,TOPOLOGY_ID,DESCR,C1,C3,C4,C7,C9,C11,C31,C34,C47,C55,C78,C109,C114,C115,C184,C189,C196,C197,C203,C208,C233,C234,C301,C302,C303,C304,C307,CLASSIFIER_ID,ZONE_ID,CTIME,CUSER_ID,CUSER)
+					VALUES(:CODE,:TOPO,:DESCR,:C1,:C3,:C4,:C7,:C9,:C11,:C31,:C34,:C47,:C55,:C78,:C109,:C114,:C115,:C184,:C189,:C196,:C197,:C203,:C208,:C233,:C234,:C301,:C302,:C303,:C304,:C307,:CLASSIFIER_ID,:ZONE_ID,current_timestamp,:USER_ID,:USER_LOGIN)
+					RETURNING ID INTO :ID;
+				</query>
+			</dbCommand>
+		</insert>
+		<update>
+			<dbCommand>
+				<param name="CODE" default="" type="String"/>
+				<param name="TOPO" default="" type="Decimal"/>
+				<param name="DESCR" default="" type="String"/>
+				<param name="C1" default="" type="Decimal"/>
+				<param name="C3" default="" type="String"/>
+				<param name="C4" default="" type="String"/>
+				<param name="C7" default="" type="Decimal"/>
+				<param name="C9" default="" type="String"/>
+				<param name="C11" default="" type="Decimal"/>
+				<param name="C31" default="" type="String"/>
+				<param name="C34" default="" type="String"/>
+				<param name="C47" default="" type="String"/>
+				<param name="C55" default="" type="String"/>
+				<param name="C78" default="" type="Decimal"/>
+				<param name="C109" default="" type="Decimal"/>
+				<param name="C114" default="" type="Decimal"/>
+				<param name="C115" default="" type="Decimal"/>
+				<param name="C184" default="" type="String"/>
+				<param name="C189" default="" type="String"/>
+				<param name="C196" default="" type="String"/>
+				<param name="C197" default="" type="String"/>
+				<param name="C203" default="" type="String"/>
+				<param name="C208" default="" type="Decimal"/>
+				<param name="C233" default="" type="String"/>
+				<param name="C234" default="" type="String"/>
+				<param name="C301" default="" type="Decimal"/>
+				<param name="C302" default="" type="Decimal"/>
+				<param name="C303" default="" type="String"/>
+				<param name="C304" default="" type="String"/>
+				<param name="C307" default="" type="String"/>
+				<param name="CLASSIFIER_ID" default="" type="Decimal"/>
+				<param name="ZONE_ID" default="0" type="Decimal"/>
+				<param name="USER_ID" default="-1" type="Decimal"/>
+				<param name="USER_LOGIN" default="" type="String"/>
+				<param name="ID" type="Int64"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="WEB50_M1_MAP" />
+				<var name="POLICY" default="POLICY.xml#UPDATE_M_SEM"  />
+				<query>
+					UPDATE WEB50.M_1_RELIEF
+					SET OBJ_CLS_ID=:CODE,TOPOLOGY_ID=:TOPO,DESCR=:DESCR,C1=:C1,C3=:C3,C4=:C4,C7=:C7,C9=:C9,C11=:C11,C31=:C31,C34=:C34,C47=:C47,C55=:C55,C78=:C78,C109=:C109,C114=:C114,C115=:C115,C184=:C184,C189=:C189,C196=:C196,C197=:C197,C203=:C203,C208=:C208,C233=:C233,C234=:C234,C301=:C301,C302=:C302,C303=:C303,C304=:C304,C307=:C307,CLASSIFIER_ID=:CLASSIFIER_ID,ZONE_ID=:ZONE_ID,MTIME=current_timestamp,MUSER_ID=:USER_ID,MUSER=:USER_LOGIN
+					WHERE ID = :ID;
+				</query>
+			</dbCommand>
+		</update>
+		<delete>
+			<dbCommand>
+				<param name="ID" type="Int64"/>
+				<param name="USER_ID" default="-1" type="Decimal"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="WEB50_M1_MAP" />
+				<var name="POLICY" default="POLICY.xml#DELETE_M_SEM"  />
+				<query>
+					DELETE FROM WEB50.M_1_RELIEF
+					WHERE ID = :ID;
+				</query>
+			</dbCommand>
+		</delete>
+	</data>
+	
+	
+	<!-- M_1_GEO.xml -->
+	<data table="M_1_RELIEF" schema="WEB50" id="WEB50_M_1_RELIEF" comment="WEB50.M_1_RELIEF">
+		<insert>
+			<geoCommand proc="GET_M_1_ZONE_ID">
+				<param name="ID" type="Int64" direction="Input"/>
+				<param name="STYLE" type="String"/>
+				<param name="ZONE_ID" type="Int64"/>
+				<param name="TOPOLOGY" type="String" direction="Input" default="1"/>
+				<param name="USER_ID" type="Decimal" default="-1"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="WEB50_M1_MAP" />
+				<var name="POLICY" default="POLICY.xml#INSERT_M_SEM"  />
+				<object>
+					UPDATE WEB50.M_1_RELIEF SET WKB_GEOMETRY=:WKB, XMIN=:XMIN, XMAX=:XMAX, YMIN=:YMIN, YMAX=:YMAX, STYLE= CASE WHEN :TOPOLOGY = 2 THEN '&lt;MI_STYLE&gt;Line (1,2,0) &lt;/MI_STYLE&gt;' WHEN :TOPOLOGY = 3 THEN '&lt;MI_STYLE&gt;Pen (1,2,0) Brush (2,16777215,16777215)&lt;/MI_STYLE&gt;' ELSE '&lt;MI_STYLE&gt;Symbol (32,0,12)&lt;/MI_STYLE&gt;' END, ZONE_ID=:ZONE_ID WHERE ID = :ID;
+				</object>
+			</geoCommand>
+		</insert>
+		<update>
+			<geoCommand proc="GET_M_1_ZONE_ID">
+				<param name="ID" type="Int64" direction="Input"/>
+				<param name="STYLE" type="String"/>
+				<param name="ZONE_ID" type="Int64"/>
+				<param name="TOPOLOGY" type="String" direction="Input" default="1"/>
+				<param name="USER_ID" type="Decimal" default="-1"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="WEB50_M1_MAP" />
+				<var name="POLICY" default="POLICY.xml#UPDATE_M_SEM"  />
+				<object>
+					UPDATE WEB50.M_1_RELIEF SET WKB_GEOMETRY=:WKB, XMIN=:XMIN, XMAX=:XMAX, YMIN=:YMIN, YMAX=:YMAX, STYLE= CASE WHEN :TOPOLOGY = 2 THEN '&lt;MI_STYLE&gt;Line (1,2,0) &lt;/MI_STYLE&gt;' WHEN :TOPOLOGY = 3 THEN '&lt;MI_STYLE&gt;Pen (1,2,0) Brush (2,16777215,16777215)&lt;/MI_STYLE&gt;' ELSE '&lt;MI_STYLE&gt;Symbol (32,0,12)&lt;/MI_STYLE&gt;' END, ZONE_ID=:ZONE_ID WHERE ID = :ID;
+				</object>
+			</geoCommand>
+		</update>
+		<delete>
+			<dbCommand>
+				<param name="ID" type="Int64" direction="Input"/>
+				<param type="Decimal" name="USER_ID"/>
+				<param name="CLASS_ID" type="String" direction="Input" default="WEB50_M1_MAP" />
+				<var name="POLICY" default="POLICY.xml#DELETE_M_SEM"  />
+				<query>
+					UPDATE WEB50.M_1_RELIEF  SET WKB_GEOMETRY=NULL, XMIN=NULL, XMAX=NULL, YMIN=NULL, YMAX=NULL, STYLE=NULL WHERE ID = :ID;
+				</query>
+			</dbCommand>
+		</delete>
+	</data>
+</root>

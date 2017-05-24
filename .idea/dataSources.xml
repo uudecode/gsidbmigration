@@ -23,5 +23,11 @@
       <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
       <jdbc-url>jdbc:oracle:thin:@10.254.3.100:11521:TESTOR</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="ltg@10.254.3.100" uuid="b9fe7f97-9c48-4ed5-9498-1a4f5011a258">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://10.254.3.100:15432/ltg</jdbc-url>
+    </data-source>
   </component>
 </project>

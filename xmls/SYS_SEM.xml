@@ -613,14 +613,14 @@
                     FROM    PODS.COMMENTS a
                     JOIN
                     PODS.PODS_TABLE b
-                    ON a.TABLE_ID = b.TABLE_ID  WHERE a.ID=:SYS_OBJ_ID and b.TABLE_NAME=:DB_TABLE_ID
+                    ON a.TABLE_ID = b.TABLE_ID  WHERE a.ID=:SYS_OBJ_ID::TEXT and b.TABLE_NAME=:DB_TABLE_ID
                     union all
                     SELECT sg.GATE_ID,lg.LEFT_OBJ_ID,lg.RIGHT_OBJ_ID,lg.CTIME,usr.LOGIN AS USERNAME,ld.DESCR AS DESCR,ld.NAME AS NAME,ld.DOC_ID AS DOC_ID,ld.DOC_TYPE_ID AS DOC_TYPE_ID,ldv.DOC_VERSION_ID AS DOC_VERSION_ID,ldv.FILE_NAME AS FILE_NAME
                     ,parentld.NAME AS PARENT_NAME,ldtr.NAME AS TYPE_NAME,ldtr.DESCR AS TYPE_DESCR,ld.MUSER_ID,ld.MTIME,musr.LOGIN AS MUSER
                     FROM s_gate sg
                     JOIN WEB50.LNK_GATE lg ON sg.GATE_ID = lg.GATE_ID
                     JOIN WEB50.B_USER_PRIVATE usr ON usr.USER_ID=lg.CUSER_ID
-                    JOIN WEB50.LIB_DOC ld ON ld.DOC_ID = sg.OBJ_ID
+                    JOIN WEB50.LIB_DOC ld ON ld.DOC_ID::TEXT = sg.OBJ_ID
                     JOIN WEB50.LIB_DOC_TYPE_REF ldtr ON ld.DOC_TYPE_ID = ldtr.DOC_TYPE_ID
                     LEFT OUTER JOIN WEB50.LIB_DOC_VERSION ldv ON ldv.DOC_ID = ld.DOC_ID
                     LEFT OUTER JOIN WEB50.B_USER_PRIVATE musr ON musr.USER_ID=ld.MUSER_ID

@@ -72,6 +72,7 @@ public abstract class Query {
     }
 
     public void prepareQueryText() {
+        LOGGER.debug("XX prepareQuery {}", originalQuery);
         if (null != originalQuery) {
             changedQuery = new String(originalQuery);
             for (Map.Entry entry : vars.entrySet()) {
@@ -103,7 +104,7 @@ public abstract class Query {
 
     public String tryQuery() throws Exception {
         String result = "OK";
-        if (queryType.equals("select")) {
+        if (queryType.equals("select") || queryType.equals("insert")) {
             Boolean gotResult = false;
             do {
                 reopenConnection();
@@ -118,6 +119,9 @@ public abstract class Query {
                     LOGGER.error("QUERY ERROR! File: [{}] Type: {} Table:[{}] Query [{}]; Error:[{}]", fileName, queryType, tableName, changedQuery, e.getMessage());
 //            LOGGER.error("QUERY ERROR! File: [{}] Table:[{}] ",fileName,tableName);
                     throw e;
+                } catch (Exception commonException) {
+                    LOGGER.error("COMMON QUERY ERROR! File: [{}] Type: {} Table:[{}] Query [{}]; Error:[{}]", fileName, queryType, tableName, changedQuery, commonException.getMessage());
+                    throw commonException;
                 }
             } while (!gotResult);
         } else {

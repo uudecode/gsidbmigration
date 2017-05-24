@@ -68,7 +68,8 @@
                     AND sp.type_cl IN ('ST_POINT_TYPE_01', 'ST_POINT_TYPE_02', 'ST_POINT_TYPE_03')
                     AND ABS(s.station_begin - s.station_end) >= 0.9
                     AND (sp.measure / 1000 + s.station_begin) BETWEEN  :KM_START AND :KM_END
-                    ORDER BY R.sequence, sp.measure / 1000 + s.station_begin		</query>
+                    ORDER BY R.sequence, sp.measure / 1000 + s.station_begin
+                </query>
             </geoQuery>
         </select>
     </data>
@@ -80,11 +81,11 @@
                 <param name="SYSTEM_ID" type="String" />
                 <param name="OBJ_ID" type="String" />
                 <query>
-                    SELECT DISTINCT 'MG' CAS_TYPE, g.obj_descr OBJ_NAME, {KM_BEGIN} KM_BEGIN, {KM_END} KM_END, r.line_id OBJ_ID from gis_integration50.gate g, pods.route r WHERE g.SYSTEM_ID = :SYSTEM_ID AND g.OBJ_ID = :OBJ_ID AND r.ROUTE_ID = g.KEY_VALUES
+                    SELECT DISTINCT 'MG' CAS_TYPE, g.obj_descr OBJ_NAME, {KM_BEGIN} KM_BEGIN, {KM_END} KM_END, r.line_id OBJ_ID from gis_integration50.gate g, pods.route r WHERE g.SYSTEM_ID = :SYSTEM_ID AND g.OBJ_ID = :OBJ_ID AND r.ROUTE_ID::TEXT = g.KEY_VALUES
                     union all
-                    SELECT DISTINCT 'MG' CAS_TYPE, g.obj_descr OBJ_NAME, {KM_BEGIN} KM_BEGIN, {KM_END} KM_END, l.line_id OBJ_ID from gis_integration50.gate g, pods.line l WHERE g.SYSTEM_ID = :SYSTEM_ID AND g.OBJ_ID = :OBJ_ID AND l.LINE_ID = g.KEY_VALUES
+                    SELECT DISTINCT 'MG' CAS_TYPE, g.obj_descr OBJ_NAME, {KM_BEGIN} KM_BEGIN, {KM_END} KM_END, l.line_id OBJ_ID from gis_integration50.gate g, pods.line l WHERE g.SYSTEM_ID = :SYSTEM_ID AND g.OBJ_ID = :OBJ_ID AND l.LINE_ID ::TEXT= g.KEY_VALUES
                     union all
-                    SELECT DISTINCT 'MG' CAS_TYPE, g.obj_descr OBJ_NAME, {KM_BEGIN} KM_BEGIN, {KM_END} KM_END, sp.line_id OBJ_ID from gis_integration50.gate g, pods.srv_district_boundary sdb, pods.event_range e, pods.station_point sp WHERE g.SYSTEM_ID = :SYSTEM_ID AND g.OBJ_ID = :OBJ_ID AND sdb.EVENT_ID = g.KEY_VALUES AND sdb.event_id = e.event_id AND sp.station_id = e.station_id_begin
+                    SELECT DISTINCT 'MG' CAS_TYPE, g.obj_descr OBJ_NAME, {KM_BEGIN} KM_BEGIN, {KM_END} KM_END, sp.line_id OBJ_ID from gis_integration50.gate g, pods.srv_district_boundary sdb, pods.event_range e, pods.station_point sp WHERE g.SYSTEM_ID = :SYSTEM_ID AND g.OBJ_ID = :OBJ_ID AND sdb.EVENT_ID::TEXT = g.KEY_VALUES AND sdb.event_id = e.event_id AND sp.station_id = e.station_id_begin
                 </query>
             </dbQuery>
         </select>
@@ -127,7 +128,7 @@
                 <param name="CLS" type="String" />
                 <param name="OBJ_ID" type="String" />
                 <query>
-                    SELECT g.TABLE_NAME CLS, g.KEY_VALUES ID, g.OBJ_ID OBJ_ID FROM GIS_INTEGRATION50.GATE g WHERE g.TABLE_NAME=(CASE :CLS WHEN 'ROUTE' THEN 'LINE' ELSE :CLS END) AND g.KEY_VALUES = (CASE :CLS WHEN 'ROUTE' THEN (SELECT (LINE_ID)::text FROM PODS.ROUTE WHERE ROUTE_ID=:OBJ_ID) ELSE :OBJ_ID END)
+                    SELECT g.TABLE_NAME CLS, g.KEY_VALUES ID, g.OBJ_ID OBJ_ID FROM GIS_INTEGRATION50.GATE g WHERE g.TABLE_NAME=(CASE :CLS WHEN 'ROUTE' THEN 'LINE' ELSE :CLS END) AND g.KEY_VALUES = (CASE :CLS WHEN 'ROUTE' THEN (SELECT (LINE_ID)::text FROM PODS.ROUTE WHERE ROUTE_ID::TEXT=:OBJ_ID) ELSE :OBJ_ID END)
                 </query>
             </dbQuery>
         </select>

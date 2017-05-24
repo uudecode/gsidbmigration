@@ -63,7 +63,7 @@
                     VALUES(:ID,:EVENT_GUID,:ZONE_CL,:DESCRIPTION,:SOURCE_GCL,:COMMENTS);
                     END;
 
-                    ELSE
+                    <ELSE>      </ELSE>
                     RAISE_APPLICATION_ERROR(-20771,'Нет прав на добавление объектов. Обратитесь к администратору.');
                     END IF;
                     END;

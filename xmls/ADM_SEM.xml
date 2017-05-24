@@ -680,7 +680,7 @@ END;
           JOIN WEB50.B_AUDIT_EVENT_TEMPLATE t ON e.EVENT_ID = t.EVENT_ID
           JOIN WEB50.B_AUDIT_EVENT_CATEGORY c ON t.CATEGORY_ID = c.CATEGORY_ID) d
           WHERE {FILTER}
-          AND FILTER_TIME_STAMP BETWEEN trunc(coalesce(:FROM_DATE,(current_timestamp - interval '1 year'))) AND (coalesce(:TO_DATE,current_timestamp) + interval '1 day' )::date
+          AND FILTER_TIME_STAMP BETWEEN (coalesce(:FROM_DATE,(current_timestamp - interval '1 year')))::date AND (coalesce(:TO_DATE,current_timestamp) + interval '1 day' )::date
           ORDER BY FILTER_TIME_STAMP DESC
         </query>
       </dbQuery>
